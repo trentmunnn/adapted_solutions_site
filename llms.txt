@@ -1,0 +1,43 @@
+# Adapted Solutions
+
+> Adapted Solutions is a consulting and custom technology solutions company serving small businesses and trade professionals. We specialize in workflow automation, custom application development, business consulting, system integration, AI and chatbot solutions, and data reporting.
+
+## Company Overview
+
+Adapted Solutions helps small businesses and trade professionals — including HVAC contractors, electricians, plumbers, and service-based businesses — streamline operations and build custom technology solutions that drive real results. We provide the same operational advantages that large enterprises enjoy, without the overhead or complexity.
+
+## Services
+
+- **Workflow Automation**: Design and deploy automation systems using n8n, API integrations, and process design to eliminate repetitive tasks and reduce errors.
+- **Custom Applications**: Build custom web applications tailored to specific workflows — from service management to invoicing and reporting.
+- **Business Consulting**: Strategic guidance on technology adoption, operational efficiency, and growth planning.
+- **System Integration**: Connect QuickBooks, CRMs, scheduling tools, and field service platforms into a unified system.
+- **AI & Chatbot Solutions**: Deploy intelligent assistants that handle customer inquiries, manage work orders, and surface business insights 24/7.
+- **Data & Reporting**: Build dashboards and automated reports that turn business data into actionable intelligence.
+
+## Products
+
+### Adapted Pro Tech
+A comprehensive business management platform built specifically for HVAC contractors, plumbers, electricians, and field service professionals. Features include:
+- Customer management with full service history
+- Work order creation, scheduling, and field dispatch
+- Invoicing with line-item tracking for labor and materials
+- Job media capture and cloud storage for documentation
+- Real-time dashboards and reporting for business visibility
+
+Learn more: https://adaptedprotech.com
+
+## Contact
+
+- Email: info@adaptedsolutionsco.com
+- Website: https://adaptedsolutionsco.com
+- Free initial consultation available
+
+## Target Industries
+
+- HVAC contractors
+- Electricians
+- Plumbers
+- Field service professionals
+- Service-based small businesses
+- Trade professionals
