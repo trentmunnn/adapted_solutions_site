@@ -49,7 +49,7 @@ function runChecks(html, url, llmsTxtExists, sitemapExists) {
     }
 
     const hasJsonLd = jsonLdText.length > 0;
-    const hasOrgSchema = /\"Organization\"|\"LocalBusiness\"/i.test(jsonLdText);
+    const hasOrgSchema = /\"Organization\"|\"LocalBusiness\"|\"ProfessionalService\"/i.test(jsonLdText);
     const hasFaqSchema = /\"FAQPage\"|\"Question\"/i.test(jsonLdText);
     const hasServiceSchema = /\"Service\"/i.test(jsonLdText);
     const hasOpenGraph = /<meta[^>]*property\s*=\s*["']og:title["']/i.test(html);

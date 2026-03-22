@@ -131,7 +131,7 @@
 
         var checks = {
             hasJsonLd: jsonLdScripts.length > 0,
-            hasOrgSchema: /\"Organization\"|\"LocalBusiness\"/i.test(jsonLdText),
+            hasOrgSchema: /\"Organization\"|\"LocalBusiness\"|\"ProfessionalService\"/i.test(jsonLdText),
             hasFaqSchema: /\"FAQPage\"|\"Question\"/i.test(jsonLdText),
             hasServiceSchema: /\"Service\"/i.test(jsonLdText),
             hasLlmsTxt: null,
