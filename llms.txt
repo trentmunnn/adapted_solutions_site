@@ -1,22 +1,25 @@
-# Adapted Solutions Co.
+# Adapted Solutions
 # https://adaptedsolutionsco.com
 
 ## About
-Adapted Solutions Co. is a business consulting and technology solutions company serving small businesses and trade professionals — particularly HVAC, plumbing, and electrical contractors.
+Adapted Solutions helps small businesses and trade professionals in two ways:
+(1) modernizing their operations with custom AI systems and applications, and
+(2) growing their digital visibility so AI engines recommend their business.
 
-## Services
+## Pillar 1 — Operations & AI Modernization
+Target: HVAC contractors, plumbers, electricians, and field service businesses.
+Services: Custom applications, AI system integration, workflow automation, business consulting.
+Flagship product: Adapted Pro Tech — a comprehensive field service management platform for trades businesses. https://adaptedprotech.com
 
-### Operations & Consulting
-Business process optimization, workflow automation, technology implementation, and AI-powered tools for trade businesses. Custom automation workflows, CRM and invoicing system integrations.
+## Pillar 2 — Adapted Solutions Digital (Digital Visibility)
+Target: Any small business that wants to be recommended by AI assistants.
+Key fact: Customers are 8x more likely to use a business recommended by AI.
+Services:
+- Free 16-point AEO/GEO audit (instant, no signup): https://adaptedsolutionsco.com/#audit-tool
+- One-time AEO/GEO implementation ($300-$800)
+- Quarterly visibility retainer (blog automation, content seeding, re-audits)
+- Full site reimagination (AI-enabled CMS, content automation, digital footprint management)
 
-### Digital Visibility (AEO/GEO Optimization)
-Website optimization for AI search engines. Services include structured data (JSON-LD schema markup), llms.txt setup, Open Graph optimization, content restructuring, and ongoing AI visibility monitoring. We help businesses get recommended by ChatGPT, Perplexity, and Google AI Overviews.
-
-## Products
-Adapted Pro Tech — field service management platform for HVAC, plumbing, and electrical contractors. https://adaptedprotech.com
-
-## Target clients
-Small businesses and trade professionals in the United States, particularly HVAC, plumbing, electrical, and other field service businesses.
-
-## Free tool
-AI Visibility Audit: https://adaptedsolutionsco.com/#audit-tool
+## Contact
+Website: https://adaptedsolutionsco.com
+Email: info@adaptedsolutionsco.com
