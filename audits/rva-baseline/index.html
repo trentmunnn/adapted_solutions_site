@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Digital Visibility Audit — Rich Valley Adventures | Adapted Solutions Co</title>
+<meta name="description" content="Baseline digital visibility audit for Rich Valley Adventures & Aspen Alpenglow Limousine, prepared by Adapted Solutions Co.">
+<meta name="robots" content="noindex, nofollow">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #c4a35a;
+    --dark: #0d1117;
+    --card: #161b22;
+    --border: #30363d;
+    --red: #f85149;
+    --yellow: #d29922;
+    --green: #3fb950;
+    --blue: #58a6ff;
+    --purple: #bc8cff;
+    --muted: #8b949e;
+    --white: #e6edf3;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--dark); color: var(--white); font-family: 'Instrument Sans', 'Segoe UI', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  .mono { font-family: 'DM Mono', monospace; }
+
+  /* Layout */
+  .header { border-bottom: 1px solid var(--border); padding: 32px 32px 0; }
+  .header-inner { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px; max-width: 1200px; margin: 0 auto; }
+  .brand-label { font-size: 11px; color: var(--gold); letter-spacing: 0.15em; text-transform: uppercase; font-weight: 600; font-family: 'DM Mono', monospace; margin-bottom: 8px; }
+  .title { font-size: 28px; font-weight: 700; line-height: 1.2; }
+  .title span { color: var(--muted); font-weight: 400; }
+  .subtitle { color: var(--muted); margin-top: 8px; font-size: 14px; }
+  .score-box { background: rgba(248,81,73,0.12); border: 1px solid rgba(248,81,73,0.35); border-radius: 10px; padding: 12px 20px; text-align: center; }
+  .score-box .num { font-size: 32px; font-weight: 700; color: var(--red); font-family: 'DM Mono', monospace; }
+  .score-box .label { font-size: 10px; color: var(--red); letter-spacing: 0.1em; text-transform: uppercase; }
+
+  /* Tabs */
+  .tabs { display: flex; gap: 0; margin-top: 24px; overflow-x: auto; max-width: 1200px; margin-left: auto; margin-right: auto; }
+  .tab { background: none; border: none; color: var(--muted); border-bottom: 2px solid transparent; padding: 10px 16px; font-size: 13px; font-weight: 600; cursor: pointer; letter-spacing: 0.02em; white-space: nowrap; transition: all 0.2s; font-family: inherit; }
+  .tab:hover { color: var(--white); }
+  .tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+  /* Content */
+  .content { padding: 32px; max-width: 1200px; margin: 0 auto; }
+  .tab-panel { display: none; flex-direction: column; gap: 24px; }
+  .tab-panel.active { display: flex; }
+
+  /* Cards */
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; }
+  .card.accent-gold { border-top: 3px solid var(--gold); }
+  .card.accent-red { border-top: 3px solid var(--red); }
+  .card.accent-yellow { border-top: 3px solid var(--yellow); }
+  .card.accent-blue { border-top: 3px solid var(--blue); }
+  .card-title { margin: 0 0 4px; font-size: 14px; font-weight: 600; color: var(--white); letter-spacing: 0.04em; text-transform: uppercase; font-family: 'DM Mono', monospace; }
+  .card-subtitle { margin: 0 0 16px; font-size: 12px; color: var(--muted); }
+
+  /* Gauges */
+  .gauges { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 24px; }
+  .gauge { text-align: center; }
+  .gauge-ring { position: relative; width: 100px; height: 100px; margin: 0 auto; }
+  .gauge-ring svg { transform: rotate(-90deg); }
+  .gauge-value { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-size: 22px; font-weight: 700; color: var(--white); font-family: 'DM Mono', monospace; }
+  .gauge-value span { font-size: 11px; color: var(--muted); }
+  .gauge-label { margin-top: 8px; font-size: 11px; color: var(--muted); letter-spacing: 0.05em; text-transform: uppercase; }
+
+  /* Badges */
+  .badge { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+  .badge-red { background: rgba(248,81,73,0.15); color: var(--red); }
+  .badge-green { background: rgba(63,185,80,0.15); color: var(--green); }
+  .badge-yellow { background: rgba(210,153,34,0.15); color: var(--yellow); }
+  .badge-blue { background: rgba(88,166,255,0.15); color: var(--blue); }
+  .badge-muted { background: rgba(139,148,158,0.15); color: var(--muted); }
+
+  /* Rows */
+  .row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(48,54,61,0.13); }
+  .row-label { color: var(--muted); font-size: 13px; flex: 1; }
+  .row-right { display: flex; align-items: center; gap: 10px; }
+  .row-value { color: var(--white); font-size: 13px; font-family: 'DM Mono', monospace; }
+
+  /* Position cell */
+  .pos-cell { display: inline-flex; align-items: center; justify-content: center; width: 56px; height: 28px; border-radius: 6px; font-family: 'DM Mono', monospace; font-weight: 700; font-size: 12px; }
+  .pos-red { background: rgba(248,81,73,0.12); border: 1px solid rgba(248,81,73,0.25); color: var(--red); font-size: 11px; }
+  .pos-green { background: rgba(63,185,80,0.12); border: 1px solid rgba(63,185,80,0.25); color: var(--green); }
+
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th { text-align: left; padding: 10px 8px; color: var(--gold); font-size: 11px; font-weight: 600; letter-spacing: 0.05em; }
+  th.center { text-align: center; }
+  td { padding: 12px 8px; vertical-align: top; border-bottom: 1px solid rgba(48,54,61,0.13); }
+  td.center { text-align: center; vertical-align: middle; }
+  thead tr { border-bottom: 2px solid var(--border); }
+
+  /* Findings grid */
+  .findings { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+  .finding { display: flex; gap: 12px; padding: 12px; border-radius: 8px; }
+  .finding-icon { font-size: 20px; }
+  .finding-label { font-size: 13px; font-weight: 600; color: var(--white); }
+  .finding-detail { font-size: 12px; margin-top: 2px; }
+
+  /* Stats row */
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-top: 20px; }
+  .stat { text-align: center; padding: 14px; background: var(--dark); border-radius: 8px; border: 1px solid var(--border); }
+  .stat-value { font-size: 24px; font-weight: 700; font-family: 'DM Mono', monospace; }
+  .stat-label { font-size: 10px; color: var(--muted); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .stat-sub { font-size: 9px; margin-top: 2px; }
+
+  /* LLM scorecards */
+  .llm-scores { display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
+  .llm-card { flex: 1; min-width: 100px; text-align: center; padding: 14px; background: var(--dark); border-radius: 8px; border: 1px solid var(--border); }
+  .llm-card .icon { font-size: 20px; margin-bottom: 4px; }
+  .llm-card .name { font-size: 12px; font-weight: 600; color: var(--white); }
+  .llm-card .score { font-size: 22px; font-weight: 700; color: var(--red); font-family: 'DM Mono', monospace; margin-top: 4px; }
+  .llm-card .method { font-size: 8px; color: var(--muted); margin-top: 4px; }
+
+  /* LLM prompt row */
+  .llm-prompt-row { cursor: pointer; transition: background 0.15s; }
+  .llm-prompt-row:hover { background: rgba(88,166,255,0.04); }
+  .llm-prompt-row.expanded { background: rgba(88,166,255,0.06); }
+  .llm-detail { display: none; background: rgba(88,166,255,0.03); }
+  .llm-detail.show { display: table-row; }
+  .llm-detail-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; padding: 8px; }
+  .llm-detail-card { padding: 10px; background: var(--dark); border-radius: 6px; border: 1px solid var(--border); }
+  .llm-detail-name { font-size: 11px; font-weight: 600; margin-bottom: 4px; }
+  .llm-detail-text { font-size: 10px; color: var(--muted); line-height: 1.5; }
+
+  /* Grand total */
+  .grand-total { margin-top: 20px; padding: 16px; background: rgba(248,81,73,0.08); border-radius: 8px; border: 1px solid rgba(248,81,73,0.25); text-align: center; }
+  .grand-total .num { font-size: 36px; font-weight: 700; color: var(--red); font-family: 'DM Mono', monospace; }
+  .grand-total .label { font-size: 12px; color: var(--red); margin-top: 4px; }
+
+  /* Section headers */
+  .section-label { font-size: 11px; color: var(--gold); font-weight: 600; letter-spacing: 0.1em; margin: 20px 0 8px; }
+  .section-label:first-child { margin-top: 0; }
+
+  /* Action phases */
+  .action-item { padding: 16px; background: var(--dark); border-radius: 8px; border: 1px solid var(--border); border-left-width: 3px; }
+  .action-header { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
+  .action-title { font-size: 13px; font-weight: 600; color: var(--white); }
+  .action-desc { font-size: 12px; color: var(--muted); line-height: 1.6; }
+  .action-pills { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+  .pill { font-size: 9px; padding: 2px 6px; border-radius: 4px; }
+
+  /* Timeline cards */
+  .timeline { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+  .timeline-card { padding: 16px; background: var(--dark); border-radius: 8px; border: 1px solid var(--border); }
+  .timeline-score { font-size: 16px; font-weight: 700; color: var(--green); font-family: 'DM Mono', monospace; }
+  .timeline-period { font-size: 12px; color: var(--gold); font-weight: 600; margin-bottom: 8px; }
+  .timeline-item { font-size: 11px; color: var(--muted); padding: 2px 0; }
+
+  /* Callout boxes */
+  .callout { padding: 14px; border-radius: 8px; }
+  .callout-red { background: rgba(248,81,73,0.08); border: 1px solid rgba(248,81,73,0.25); }
+  .callout-red p { color: var(--red); font-size: 12px; margin: 0; }
+  .callout-gold { padding: 16px; background: rgba(196,163,90,0.08); border-radius: 8px; border: 1px solid rgba(196,163,90,0.25); }
+  .callout-gold .callout-title { color: var(--gold); font-size: 13px; font-weight: 600; margin-bottom: 8px; }
+  .callout-gold p { color: var(--muted); font-size: 12px; margin: 0; line-height: 1.7; }
+
+  /* Impact legend */
+  .impact-legend { margin-bottom: 20px; padding: 16px; background: rgba(196,163,90,0.06); border-radius: 8px; border: 1px solid rgba(196,163,90,0.18); }
+  .impact-legend-title { font-size: 13px; color: var(--gold); font-weight: 600; margin-bottom: 6px; }
+  .impact-legend-items { display: flex; gap: 16px; flex-wrap: wrap; font-size: 11px; color: var(--muted); }
+
+  /* Signal rows */
+  .signal-row { display: flex; align-items: center; gap: 8px; padding: 10px 0; border-bottom: 1px solid rgba(48,54,61,0.13); flex-wrap: wrap; }
+  .signal-label { color: var(--white); font-size: 13px; flex: 1 1 200px; }
+  .signal-status { color: var(--red); font-size: 11px; font-family: 'DM Mono', monospace; width: 70px; text-align: center; }
+  .signal-impact { font-size: 10px; padding: 2px 8px; border-radius: 8px; width: 55px; text-align: center; }
+  .signal-note { font-size: 10px; color: var(--muted); flex: 1 1 200px; }
+
+  /* Prompt arrow */
+  .prompt-arrow { color: var(--muted); font-size: 10px; transition: transform 0.2s; display: inline-block; }
+  .prompt-arrow.open { transform: rotate(90deg); }
+
+  /* Category tag */
+  .cat-tag { font-size: 9px; padding: 1px 6px; border-radius: 6px; margin: 0 6px; }
+  .cat-adventure { background: rgba(63,185,80,0.12); color: var(--green); }
+  .cat-transport { background: rgba(88,166,255,0.12); color: var(--blue); }
+
+  /* Footer */
+  .footer { border-top: 1px solid var(--border); padding: 20px 32px; text-align: center; font-size: 11px; color: var(--muted); }
+  .footer span { color: var(--gold); }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .header { padding: 20px 16px 0; }
+    .content { padding: 20px 16px; }
+    .title { font-size: 20px; }
+    .card { padding: 16px; }
+    .findings { grid-template-columns: 1fr; }
+    .llm-scores { flex-direction: column; }
+    .llm-card { min-width: unset; }
+  }
+
+  /* Print */
+  @media print {
+    body { background: white; color: #111; }
+    .tab, .tabs { display: none !important; }
+    .tab-panel { display: flex !important; }
+    .card { border: 1px solid #ccc; break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div>
+      <div class="brand-label">Adapted Solutions Co — Digital Visibility Audit</div>
+      <h1 class="title">Rich Valley Adventures <span>&</span> Aspen Alpenglow Limousine</h1>
+      <p class="subtitle">Baseline captured March 23, 2026 — Pre-engagement snapshot</p>
+    </div>
+    <div class="score-box">
+      <div class="num">12</div>
+      <div class="label">Overall / 100</div>
+    </div>
+  </div>
+  <div class="tabs" id="tabs">
+    <button class="tab active" data-tab="overview">Overview</button>
+    <button class="tab" data-tab="seo">SEO & Positions</button>
+    <button class="tab" data-tab="aeo">AEO / GEO</button>
+    <button class="tab" data-tab="llm">LLM × Model</button>
+    <button class="tab" data-tab="presence">Digital Presence</button>
+    <button class="tab" data-tab="actions">Next Best Actions</button>
+    <button class="tab" data-tab="method">Methodology</button>
+  </div>
+</div>
+
+<div class="content" id="content"></div>
+
+<div class="footer">Prepared by <span>Adapted Solutions Co</span> • adaptedsolutionsco.com • March 23, 2026</div>
+
+<script>
+// === DATA ===
+const seoKeywords = [
+  { kw: "best fly fishing guide Aspen Colorado", vol: "High", pos: null, top3: ["Aspen Trout Guides","Aspen Flyfishing","Elk Mountain Expeditions"], note: "10+ competitors indexed. RVA absent from first 50+ results." },
+  { kw: "Aspen limo service", vol: "High", pos: null, top3: ["Aspen Limo Service (Hermes)","Aspen Way To Go","Silver Fox Transportation"], note: "Dominated by established limo brands." },
+  { kw: "black car service Aspen airport", vol: "High", pos: null, top3: ["JohnnyO Limo","Squad Limo","Silver Fox"], note: "All top results have deep review profiles." },
+  { kw: "outdoor adventure tours Aspen Colorado", vol: "Med", pos: null, top3: ["Blazing Adventures (51 yrs)","Aspen Outfitting Co (1969)","The Little Nell"], note: "Long-tenured incumbents dominate." },
+  { kw: "luxury glamping Aspen Colorado", vol: "Med", pos: null, top3: ["Collective Retreats","Airbnb listings","Under Canvas"], note: "RVA elevated camping not indexed." },
+  { kw: "Aspen horseback riding guided", vol: "Med", pos: null, top3: ["Aspen Outfitting Co","Maroon Bells Outfitters","Blazing Adventures"], note: "Long-tenured outfitters dominate." },
+  { kw: "Aspen paddle boarding guided tour", vol: "Low", pos: null, top3: ["Blazing Adventures","Elk Mountain","AllAspen.com"], note: "Lower competition but still absent." },
+  { kw: "scenic Escalade tours Aspen", vol: "Branded", pos: null, top3: ["Dean's Aspen Tours","Rich & Famous Tour","Blazing Adventures"], note: "Unique RVA product — zero search presence." },
+  { kw: "Aspen airport transportation private SUV", vol: "High", pos: null, top3: ["Aspen Limo Services","B-LineXpress","CTS Aspen"], note: "Requires GBP + reviews to rank." },
+  { kw: '"Rich Valley Adventures"', vol: "Branded", pos: "1", top3: ["richvalleyadventures.com","Facebook page","Aspen Chamber listing"], note: "Brand search works — low authority directories follow." },
+  { kw: '"Aspen Alpenglow Limousine"', vol: "Branded", pos: null, top3: ["— No relevant results —"], note: "CRITICAL: Brand returns ZERO results." },
+];
+
+const llmModels = [
+  { name:"Claude", icon:"🟠", color:"#e8956a", method:"Live tested" },
+  { name:"ChatGPT", icon:"🟢", color:"#74aa9c", method:"Inferred (web index)" },
+  { name:"Gemini", icon:"🔵", color:"#4285f4", method:"Inferred (Google)" },
+  { name:"Grok", icon:"⚪", color:"#999", method:"Inferred (X/social)" },
+  { name:"Perplexity", icon:"🟣", color:"#bc8cff", method:"Inferred (citations)" },
+];
+
+const llmPrompts = [
+  { prompt:"Best guided fly fishing tours in Aspen?", cat:"Adventure", d:{ Claude:"Aspen Trout Guides, Little Nell, Taylor Creek, Aspen Flyfishing", ChatGPT:"Same brands via web search; RVA absent", Gemini:"Mirrors organic where RVA not indexed", Grok:"Minimal social signal to surface", Perplexity:"No RVA content to cite" }},
+  { prompt:"Recommend limo for Aspen airport transfer", cat:"Transport", d:{ Claude:"Aspen Limo Services, Silver Fox, CTS, JohnnyO", ChatGPT:"Alpenglow zero web mentions", Gemini:"Mirrors organic; Alpenglow absent", Grok:"No social presence for Alpenglow", Perplexity:"Alpenglow has no citable sources" }},
+  { prompt:"Best outdoor adventure companies Aspen CO", cat:"Adventure", d:{ Claude:"Blazing Adventures, Aspen Outfitting, Expeditions", ChatGPT:"RVA lacks review/content signals", Gemini:"Chamber listing alone insufficient", Grok:"Limited social footprint", Perplexity:"RVA in neither Google nor citations" }},
+  { prompt:"Luxury glamping near Aspen guided", cat:"Adventure", d:{ Claude:"Collective Retreats, Under Canvas, Airbnb", ChatGPT:"RVA glamping not indexed", Gemini:"No structured data for RVA", Grok:"No social content circulating", Perplexity:"Cites travel blogs where RVA absent" }},
+  { prompt:"Black car service Roaring Fork weddings", cat:"Transport", d:{ Claude:"CTS Aspen, Silver Fox, Aspen Way To Go", ChatGPT:"CTS and Hermes dominate", Gemini:"Local pack excludes Alpenglow", Grok:"No signal from any source", Perplexity:"Zero citable mentions" }},
+];
+
+const actionPhases = [
+  { phase:"IMMEDIATE", timeline:"Week 1–2", color:"var(--gold)", icon:"⚡", actions:[
+    { title:"Claim & optimize Google Business Profile", desc:"Complete business info, photos, categories for BOTH Rich Valley Adventures AND Aspen Alpenglow Limousine. Verify ownership. Single highest-impact action.", impact:"Critical", affects:["SEO","AEO","LLM","Presence"] },
+    { title:"Create TripAdvisor listing", desc:"Claim as 'Attraction' and 'Tour Operator'. Begin soliciting reviews from past clients immediately.", impact:"Critical", affects:["SEO","LLM","Presence"] },
+    { title:"Create Yelp business page", desc:"Claim for both brands. Complete all fields, upload photos. Yelp is a primary data source for LLMs.", impact:"Critical", affects:["SEO","LLM","Presence"] },
+    { title:"Implement Schema.org markup", desc:"Add LocalBusiness, TouristAttraction, LimousineBroker JSON-LD to richvalleyadventures.com. Include FAQPage schema on each service page.", impact:"High", affects:["AEO","SEO"] },
+    { title:'Index "Aspen Alpenglow Limousine" brand', desc:"Create dedicated landing page, separate GBP listing, and directory submissions. Currently returns ZERO results for this brand name anywhere.", impact:"Critical", affects:["SEO","AEO","LLM","Presence"] },
+  ]},
+  { phase:"SHORT-TERM", timeline:"Week 3–6", color:"var(--blue)", icon:"🎯", actions:[
+    { title:"List on Viator / TripAdvisor Experiences", desc:"Submit adventure products for booking. Feeds TripAdvisor and Viator's 3,500+ distribution partners.", impact:"High", affects:["SEO","LLM","Presence"] },
+    { title:"Submit to Aspen Airport provider list", desc:"Contact ASE airport to get on the official ground transportation page. All major competitors are listed.", impact:"High", affects:["SEO","Presence"] },
+    { title:"NAP consistency audit & fix", desc:"Ensure Name, Address, Phone are identical across all citations. Inconsistency hurts local SEO and confuses AI systems.", impact:"High", affects:["SEO","AEO"] },
+    { title:"Launch review generation campaign", desc:"Email/text past clients requesting Google and TripAdvisor reviews. Target: 20+ reviews across platforms within 60 days.", impact:"High", affects:["SEO","LLM","Presence"] },
+    { title:"Create service-specific landing pages", desc:"Dedicated pages for: fly fishing, horseback, glamping, airport transfers, wedding transport, scenic tours. Each with unique keyword-targeted content.", impact:"High", affects:["SEO","AEO"] },
+  ]},
+  { phase:"MEDIUM-TERM", timeline:"Month 2–3", color:"var(--purple)", icon:"📈", actions:[
+    { title:"Content marketing — blog & guides", desc:"Publish keyword-targeted articles like 'Best Fly Fishing Spots in Aspen', 'Guide to Aspen Airport Transportation'. Target the exact keywords where competitors rank.", impact:"Medium", affects:["SEO","AEO","LLM"] },
+    { title:"List on GetYourGuide & Airbnb Experiences", desc:"Expand booking platform presence. Each listing creates another indexed, citable source for LLMs.", impact:"Medium", affects:["LLM","Presence"] },
+    { title:"Editorial / blogger outreach", desc:"Pitch to Aspen-area travel bloggers, Colorado tourism sites, outdoor publications. Editorial backlinks are the #1 signal for both SEO and LLM training.", impact:"High", affects:["SEO","LLM"] },
+    { title:"Social media growth strategy", desc:"Increase posting frequency, Reels/Stories showcasing adventures. Target Aspen visitor hashtags. Build from 317 to 1,000+ FB followers.", impact:"Medium", affects:["Presence","LLM"] },
+    { title:"Submit to wedding directories", desc:"List Aspen Alpenglow on WeddingWire, The Knot, Eventective for wedding transportation.", impact:"Medium", affects:["SEO","Presence"] },
+  ]},
+  { phase:"ONGOING", timeline:"Month 3+", color:"var(--green)", icon:"🔄", actions:[
+    { title:"Monitor & respond to all reviews", desc:"Active review management across all platforms. Respond within 24 hours. Positive review velocity is a key ranking signal.", impact:"High", affects:["SEO","LLM","Presence"] },
+    { title:"Reddit & forum presence", desc:"Participate authentically in r/aspen, r/flyfishing, r/colorado, travel forums. Reddit data powers Grok & ChatGPT browse.", impact:"Medium", affects:["LLM"] },
+    { title:"Quarterly press releases", desc:"Seasonal offerings, new services, partnerships. Each release creates an indexed citation that feeds LLM knowledge.", impact:"Medium", affects:["SEO","LLM"] },
+    { title:"Re-test baseline at 30/60/90 days", desc:"Run the same 11 keyword searches, 25 LLM tests, and platform audit. Track score improvement from 12/100 baseline.", impact:"Critical", affects:["All"] },
+    { title:"Structured data maintenance", desc:"Keep schema markup updated as services change. Monitor Google Search Console for errors.", impact:"Medium", affects:["AEO"] },
+  ]},
+];
+
+// === RENDER HELPERS ===
+function badge(status) {
+  const m = { "Not Found":"badge-red", "Found":"badge-green", "Minimal":"badge-yellow", "Claimed":"badge-green", "No Listing":"badge-red", "Active":"badge-green", "None":"badge-red", "Exists":"badge-blue", "Not Mentioned":"badge-red" };
+  const icons = { "Not Found":"✗", "Found":"✓", "Minimal":"~", "Claimed":"✓", "No Listing":"✗", "Active":"✓", "None":"✗", "Exists":"○", "Not Mentioned":"✗" };
+  return `<span class="badge ${m[status]||'badge-muted'}">${icons[status]||'?'} ${status}</span>`;
+}
+function posCell(pos) {
+  if (!pos) return `<div class="pos-cell pos-red">50+</div>`;
+  return `<div class="pos-cell pos-green">#${pos}</div>`;
+}
+function row(label, value, status) {
+  return `<div class="row"><span class="row-label">${label}</span><div class="row-right">${value?`<span class="row-value">${value}</span>`:''}${status?badge(status):''}</div></div>`;
+}
+function gauge(score, max, label, color) {
+  const pct = (score/max)*100;
+  return `<div class="gauge"><div class="gauge-ring"><svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="15.9" fill="none" stroke="var(--border)" stroke-width="3"/><circle cx="18" cy="18" r="15.9" fill="none" stroke="${color}" stroke-width="3" stroke-dasharray="${pct} ${100-pct}" stroke-linecap="round"/></svg><div class="gauge-value">${score}<span>/${max}</span></div></div><div class="gauge-label">${label}</div></div>`;
+}
+
+// === TAB CONTENT ===
+const panels = {};
+
+panels.overview = `
+<div class="gauges">${gauge(2,25,"SEO / Web Search","var(--red)")}${gauge(3,25,"AEO / GEO","var(--red)")}${gauge(1,25,"LLM Recommend","var(--red)")}${gauge(6,25,"Digital Presence","var(--yellow)")}</div>
+<div class="card accent-gold"><h3 class="card-title">Executive Summary</h3><div style="height:12px"></div><div style="font-size:14px;color:var(--muted);line-height:1.7"><p style="margin:0 0 12px">RVA and Aspen Alpenglow have an extremely low digital footprint. Operating since <span style="color:var(--white)">2012</span>, <span style="color:var(--red)">neither brand appears in any competitive search results</span>.</p><p style="margin:0 0 12px">Across <span style="color:var(--white)">11 keywords</span>: ranked #1 for brand name only, <span style="color:var(--red)">position 50+ for all 9 competitive terms</span>. "Aspen Alpenglow Limousine" <span style="color:var(--red)">returns zero results</span>.</p><p style="margin:0">Across <span style="color:var(--white)">5 prompts × 5 LLMs = 25 tests</span>: <span style="color:var(--red)">0 mentions</span>. Complete shutout.</p></div></div>
+<div class="card"><h3 class="card-title">Key Findings</h3><div style="height:12px"></div><div class="findings">${[
+  {i:"🔍",l:"SEO: 0/9 competitive keywords",d:"All positions 50+",c:"red"},{i:"🤖",l:"LLM: 0/25 model × prompt mentions",d:"Not recommended by any AI",c:"red"},{i:"⭐",l:"TripAdvisor / Viator / Yelp: None",d:"Zero on top 3 review platforms",c:"red"},{i:"🚫",l:'"Aspen Alpenglow" = 0 results',d:"Brand unindexed anywhere",c:"red"},{i:"📍",l:"GBP: Minimal reviews",d:"Competitors have 50-600+",c:"yellow"},{i:"📱",l:"Social: 317 FB, low IG",d:"Competitors: 1K-10K+",c:"yellow"},{i:"🏛️",l:"Aspen Chamber: Listed",d:"Only high-authority citation",c:"green"},{i:"📰",l:"Press: 1 release",d:"No editorial coverage",c:"yellow"}
+].map(f=>`<div class="finding" style="background:var(--${f.c})08;border:1px solid var(--${f.c})20"><span class="finding-icon">${f.i}</span><div><div class="finding-label">${f.l}</div><div class="finding-detail" style="color:var(--${f.c})">${f.d}</div></div></div>`).join('')}</div></div>`;
+
+panels.seo = `<div class="card accent-red"><h3 class="card-title">Search Position Benchmark</h3><p class="card-subtitle">Exact position where RVA/Alpenglow appears. 50+ = not found in first 5 pages.</p><div style="overflow-x:auto"><table><thead><tr><th>KEYWORD</th><th class="center" style="width:55px">VOL</th><th class="center" style="width:80px">RVA POS</th><th>WHO RANKS INSTEAD</th></tr></thead><tbody>${seoKeywords.map(k=>`<tr><td><div style="color:var(--white);font-size:13px;font-weight:500">${k.kw}</div><div style="color:var(--muted);font-size:10px;margin-top:4px">${k.note}</div></td><td class="center"><span class="badge badge-muted">${k.vol}</span></td><td class="center">${posCell(k.pos)}</td><td>${k.top3.filter(Boolean).map((c,j)=>`<div style="font-size:11px;color:${j===0?'var(--green)':'var(--white)'};padding:1px 0"><span class="mono" style="color:var(--muted);font-size:10px;margin-right:6px">#${j+1}</span>${c}</div>`).join('')}</td></tr>`).join('')}</tbody></table></div><div class="stats">${[{l:"Total Keywords",v:"11",c:"white"},{l:"Ranked Top 10",v:"1",s:"(brand only)",c:"yellow"},{l:"Not Found (50+)",v:"9/9",s:"competitive",c:"red"},{l:"Alpenglow Branded",v:"0",s:"zero indexed",c:"red"}].map(s=>`<div class="stat"><div class="stat-value" style="color:var(--${s.c})">${s.v}</div><div class="stat-label">${s.l}</div>${s.s?`<div class="stat-sub" style="color:var(--${s.c})">${s.s}</div>`:''}</div>`).join('')}</div></div>`;
+
+panels.aeo = `<div class="card accent-yellow"><h3 class="card-title">AEO Compliance</h3><p class="card-subtitle">Can AI systems extract and cite this business?</p>${[["Schema.org structured data",null,"Not Found"],["FAQ schema on website",null,"Not Found"],["Service-level pages with structured content",null,"Found"],["Consistent NAP across web","Partial","Minimal"],["Google Business Profile",null,"Minimal"],["JSON-LD or Microdata on site",null,"Not Found"]].map(r=>row(r[0],r[1],r[2])).join('')}</div><div class="card"><h3 class="card-title">GEO Readiness</h3><p class="card-subtitle">Will AI search engines surface this business?</p>${[["Google AI Overview — fishing queries",null,"Not Found"],["Google AI Overview — limo queries",null,"Not Found"],["Google AI Overview — adventure queries",null,"Not Found"],["Authoritative third-party citations","1 (Chamber)","Minimal"],["Review signals from major platforms",null,"None"],["Backlinks from travel/tourism domains",null,"Minimal"]].map(r=>row(r[0],r[1],r[2])).join('')}<div class="callout callout-red" style="margin-top:16px"><p>✗ AI engines rely on review volume, structured data, and authoritative backlinks. RVA has virtually none.</p></div></div>`;
+
+panels.llm = `<div class="card accent-blue"><h3 class="card-title">LLM Recommendation Matrix</h3><p class="card-subtitle">5 prompts × 5 models. Click any row to expand per-model detail.</p><div class="llm-scores">${llmModels.map(m=>`<div class="llm-card"><div class="icon">${m.icon}</div><div class="name">${m.name}</div><div class="score">0/5</div><div class="method">${m.method}</div></div>`).join('')}</div><div style="overflow-x:auto"><table><thead><tr><th style="min-width:200px">PROMPT</th>${llmModels.map(m=>`<th class="center" style="min-width:80px;color:${m.color};font-size:10px">${m.icon} ${m.name}</th>`).join('')}</tr></thead><tbody id="llm-tbody">${llmPrompts.map((p,i)=>`<tr class="llm-prompt-row" data-idx="${i}"><td><span class="prompt-arrow" id="arrow-${i}">▶</span><span class="cat-tag cat-${p.cat.toLowerCase()}">${p.cat}</span><span style="color:var(--white);font-size:12px">${p.prompt}</span></td>${llmModels.map(()=>`<td class="center">${badge("Not Mentioned")}</td>`).join('')}</tr><tr class="llm-detail" id="detail-${i}"><td colspan="6"><div class="llm-detail-grid">${llmModels.map(m=>`<div class="llm-detail-card"><div class="llm-detail-name" style="color:${m.color}">${m.icon} ${m.name}</div><div class="llm-detail-text">${p.d[m.name]}</div></div>`).join('')}</div></td></tr>`).join('')}</tbody></table></div><div class="grand-total"><div class="num">0 / 25</div><div class="label">Total mentions across all models × all prompts</div></div></div>
+<div class="card"><h3 class="card-title">Signal Analysis — Why LLMs Don't Know RVA</h3><div style="height:12px"></div>${[
+  {s:"Review platforms (TripAdvisor, Yelp, Google)",r:"Absent",i:"Critical",n:"Primary training data for all LLMs"},
+  {s:"Travel aggregators (Viator, GetYourGuide)",r:"Absent",i:"Critical",n:"Feeds Gemini, ChatGPT browse, Perplexity"},
+  {s:"Blog/editorial mentions on travel sites",r:"None",i:"High",n:"Key for Perplexity citations & GPT training"},
+  {s:"Reddit mentions or forum discussions",r:"None",i:"High",n:"Reddit data powers Grok & ChatGPT browse"},
+  {s:"Social media volume & engagement",r:"Low",i:"Medium",n:"Grok specifically weights X/social data"},
+  {s:"Press coverage on indexed sites",r:"1 release",i:"Medium",n:"Press Advantage alone insufficient"},
+].map(x=>{const ic=x.i==="Critical"?"red":x.i==="High"?"yellow":"muted";return`<div class="signal-row"><span class="signal-label">${x.s}</span><span class="signal-status">${x.r}</span><span class="signal-impact" style="background:var(--${ic})15;color:var(--${ic})">${x.i}</span><span class="signal-note">${x.n}</span></div>`}).join('')}</div>`;
+
+panels.presence = `<div class="card accent-gold"><h3 class="card-title">Platform Audit</h3><div style="height:12px"></div>${[
+  {g:"OWNED PROPERTIES",items:[["richvalleyadventures.com","Active, Squarespace","Active"],["Facebook","317 likes","Active"],["Instagram","Exists","Exists"]]},
+  {g:"REVIEW PLATFORMS",items:[["Google Business Profile","Few reviews","Minimal"],["Yelp",null,"No Listing"],["TripAdvisor",null,"No Listing"],["Viator",null,"No Listing"]]},
+  {g:"TRAVEL & BOOKING",items:[["GetYourGuide",null,"No Listing"],["Airbnb Experiences",null,"No Listing"],["Adventure Collective","Listed","Found"]]},
+  {g:"DIRECTORIES",items:[["Aspen Chamber",null,"Claimed"],["Alignable","4 recs","Found"],["ProvenExpert","20 reviews, 5.0★","Found"],["About.me / Nextdoor / Parkbench / ZoomInfo","Exist","Found"],["Bizoforce","0 reviews","Minimal"]]},
+  {g:"PR & CONTENT",items:[["Press Advantage","1 article, Jul 2025","Found"],["Phomo Media","Listed","Found"],["Reddit / blog / editorial",null,"Not Found"]]},
+  {g:"TRANSPORT-SPECIFIC",items:[["Aspen Airport authorized list",null,"Not Found"],["Wedding directories",null,"Not Found"]]},
+].map((g,gi)=>`<div class="section-label" ${gi===0?'style="margin-top:0"':''}>${g.g}</div>${g.items.map(i=>row(i[0],i[1],i[2])).join('')}`).join('')}</div>`;
+
+panels.actions = `
+<div class="card accent-gold"><h3 class="card-title">Next Best Actions</h3><p class="card-subtitle">Prioritized action plan to move from 12/100 to competitive visibility.</p><div class="impact-legend"><div class="impact-legend-title">Impact Legend</div><div class="impact-legend-items"><span><span style="color:var(--red)">●</span> Critical — Blocking visibility</span><span><span style="color:var(--yellow)">●</span> High — Major improvement lever</span><span><span style="color:var(--blue)">●</span> Medium — Incremental gains</span></div></div></div>
+${actionPhases.map(ph=>`<div class="card" style="border-top:3px solid ${ph.color}"><h3 class="card-title">${ph.icon}  ${ph.phase}  —  ${ph.timeline}</h3><div style="height:12px"></div><div style="display:flex;flex-direction:column;gap:16px">${ph.actions.map((a,ai)=>{const ic=a.impact==="Critical"?"red":a.impact==="High"?"yellow":"blue";const pc={SEO:"red",AEO:"yellow",LLM:"blue",Presence:"green",All:"gold"};return`<div class="action-item" style="border-left-color:var(--${ic})"><div class="action-header"><span class="action-title">${ai+1}. ${a.title}</span><span class="badge badge-${ic}" style="font-size:9px">${a.impact}</span></div><div class="action-desc">${a.desc}</div><div class="action-pills">${a.affects.map(p=>`<span class="pill" style="background:var(--${pc[p]||'muted'})15;color:var(--${pc[p]||'muted'})">${p}</span>`).join('')}</div></div>`}).join('')}</div></div>`).join('')}
+<div class="card"><h3 class="card-title">Expected Impact Timeline</h3><div style="height:12px"></div><div class="timeline">${[
+  {p:"30 Days",t:"25-35/100",items:["GBP claimed & optimized","TripAdvisor + Yelp created","Schema markup deployed","Alpenglow brand indexed","First 10+ reviews"]},
+  {p:"60 Days",t:"40-55/100",items:["Viator listing live","20+ reviews across platforms","Service landing pages ranking","1-2 LLMs mentioning with search","NAP consistency fixed"]},
+  {p:"90 Days",t:"55-70/100",items:["Top 20 for 3+ keywords","50+ total reviews","3+ LLMs recommending","Blog content ranking","Full platform ecosystem"]},
+].map(t=>`<div class="timeline-card"><div class="timeline-score">${t.t}</div><div class="timeline-period">${t.p}</div>${t.items.map(i=>`<div class="timeline-item">• ${i}</div>`).join('')}</div>`).join('')}</div></div>`;
+
+panels.method = `<div class="card accent-gold"><h3 class="card-title">Re-Test Framework</h3><p class="card-subtitle">Baseline: March 23, 2026. Repeat at 30, 60, 90 days.</p><div style="font-size:13px;color:var(--muted);line-height:1.8">${[
+  {t:"1. SEO POSITIONS (25 pts)",d:"Search each 11 keywords in Google incognito (Aspen CO). Record exact position or 50+. Note local pack. Compare to baseline."},
+  {t:"2. AEO / GEO (25 pts)",d:"Schema validator on site. Check Google AI Overview, Perplexity, Bing Copilot citations. NAP audit. Backlink count."},
+  {t:"3. LLM MATRIX (25 pts)",d:"Ask all 5 prompts to Claude, ChatGPT, Gemini, Grok, Perplexity. Record Y/N, position, accuracy. Track 0/25 improvement."},
+  {t:"4. DIGITAL PRESENCE (25 pts)",d:"Re-check all platforms. Count reviews + avg rating. Social followers + engagement. New citations."},
+].map((m,i)=>`<div style="font-size:12px;color:var(--gold);font-weight:600;letter-spacing:0.1em;margin:${i>0?'12px':'0'} 0 4px">${m.t}</div><p style="margin:0 0 4px">${m.d}</p>`).join('')}<div class="callout-gold" style="margin-top:20px"><div class="callout-title">Success Story Template</div><p>"Before Adapted Solutions, Rich Valley Adventures scored <span style="color:var(--red);font-weight:600">12/100</span> — <span style="color:var(--red)">0 competitive keywords, 0/5 AI models (0/25 total)</span>, absent from every review platform. After [X] months: <span style="color:var(--green);font-weight:600">[POST]/100</span> — top 10 for [X] keywords, [X]/5 AI assistants ([X]/25 total), [X] reviews across [X] platforms. <span style="color:var(--green);font-weight:600">[X]×</span> improvement."</p></div></div></div>`;
+
+// === INIT ===
+const content = document.getElementById('content');
+const tabBtns = document.querySelectorAll('.tab');
+
+function showTab(id) {
+  content.innerHTML = `<div class="tab-panel active">${panels[id]}</div>`;
+  tabBtns.forEach(b => b.classList.toggle('active', b.dataset.tab === id));
+  // Rebind LLM expand
+  if (id === 'llm') {
+    document.querySelectorAll('.llm-prompt-row').forEach(row => {
+      row.addEventListener('click', () => {
+        const idx = row.dataset.idx;
+        const detail = document.getElementById('detail-' + idx);
+        const arrow = document.getElementById('arrow-' + idx);
+        const isOpen = detail.classList.contains('show');
+        document.querySelectorAll('.llm-detail').forEach(d => d.classList.remove('show'));
+        document.querySelectorAll('.prompt-arrow').forEach(a => a.classList.remove('open'));
+        document.querySelectorAll('.llm-prompt-row').forEach(r => r.classList.remove('expanded'));
+        if (!isOpen) {
+          detail.classList.add('show');
+          arrow.classList.add('open');
+          row.classList.add('expanded');
+        }
+      });
+    });
+  }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+tabBtns.forEach(btn => btn.addEventListener('click', () => showTab(btn.dataset.tab)));
+showTab('overview');
+</script>
+</body>
+</html>
