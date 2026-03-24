@@ -5,3 +5,8 @@ compatibility_date = "2024-01-01"
 routes = [
   { pattern = "adaptedsolutionsco.com/api/*", zone_name = "adaptedsolutionsco.com" }
 ]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "adapted-db"
+database_id = "b0979e62-015e-4d5d-886d-015c5952424f"

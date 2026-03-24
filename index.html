@@ -1373,6 +1373,120 @@
             transform: translateY(-2px);
         }
 
+        .form-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .form-honeypot {
+            position: absolute;
+            left: -9999px;
+            opacity: 0;
+            height: 0;
+            width: 0;
+            overflow: hidden;
+        }
+
+        /* ─── POPUP MODAL ─── */
+        .popup-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .popup-overlay.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .popup-modal {
+            background: #111;
+            border: 1px solid #222;
+            max-width: 460px;
+            width: 90%;
+            padding: 2.5rem 2rem 2rem;
+            text-align: center;
+            position: relative;
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+        }
+
+        .popup-overlay.visible .popup-modal {
+            transform: translateY(0);
+        }
+
+        .popup-modal--success {
+            border-top: 3px solid var(--accent);
+        }
+
+        .popup-modal--error {
+            border-top: 3px solid #c0392b;
+        }
+
+        .popup-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .popup-icon--success { color: var(--accent); }
+        .popup-icon--error { color: #c0392b; }
+
+        .popup-title {
+            font-family: var(--font-heading);
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+        }
+
+        .popup-body {
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            font-weight: 300;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .popup-btn {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            padding: 0.75rem 2rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .popup-btn--success {
+            background: var(--accent);
+            color: var(--bg-primary);
+        }
+
+        .popup-btn--success:hover {
+            background: var(--text-primary);
+        }
+
+        .popup-btn--error {
+            background: #c0392b;
+            color: #fff;
+        }
+
+        .popup-btn--error:hover {
+            background: #e74c3c;
+        }
+
         /* ─── FAQ ─── */
         .faq {
             background: var(--bg-primary);
@@ -2094,25 +2208,42 @@
                     <span class="contact-detail-value"><a href="mailto:info@adaptedsolutionsco.com">info@adaptedsolutionsco.com</a></span>
                 </div>
             </div>
-            <form class="contact-form fade-in" onsubmit="handleSubmit(event)">
+            <form id="contact-form" class="contact-form fade-in">
                 <div class="form-row">
                     <div class="form-group">
                         <label for="name">Name</label>
                         <input type="text" id="name" name="name" required placeholder="Your name">
                     </div>
                     <div class="form-group">
-                        <label for="company">Company</label>
-                        <input type="text" id="company" name="company" placeholder="Your business name">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required placeholder="your@email.com">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="phone">Phone</label>
+                        <input type="tel" id="phone" name="phone" placeholder="(optional)">
+                    </div>
+                    <div class="form-group">
+                        <label for="serviceInterest">Service Interest</label>
+                        <select id="serviceInterest" name="serviceInterest" required>
+                            <option value="" disabled selected>Select a service</option>
+                            <option value="operations-ai">Operations &amp; AI Modernization</option>
+                            <option value="digital-visibility">Digital Visibility</option>
+                            <option value="general">General Inquiry</option>
+                        </select>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" required placeholder="your@email.com">
-                </div>
-                <div class="form-group">
                     <label for="message">Message</label>
-                    <textarea id="message" name="message" placeholder="Tell us about your business and what you're looking to solve..."></textarea>
+                    <textarea id="message" name="message" required placeholder="Tell us about your business and what you're looking to solve..."></textarea>
                 </div>
+                <!-- Honeypot — hidden from humans, bots fill it -->
+                <div class="form-honeypot" aria-hidden="true">
+                    <input type="text" name="website" tabindex="-1" autocomplete="off">
+                </div>
+                <!-- Cloudflare Turnstile -->
+                <div class="cf-turnstile" data-sitekey="0x4AAAAAACvhDfjAEBaNr7kS" data-theme="dark"></div>
                 <button type="submit" class="form-submit">Send Message <span>&rarr;</span></button>
             </form>
         </div>
@@ -2222,6 +2353,7 @@
         </div>
     </footer>
 
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
     <script src="/js/audit-tool.js"></script>
     <script>
         // Scroll-triggered fade-in
@@ -2242,19 +2374,114 @@
             });
         });
 
-        // Form handler (placeholder — replace with actual endpoint)
-        function handleSubmit(e) {
-            e.preventDefault();
-            const btn = e.target.querySelector('.form-submit');
-            btn.textContent = 'Message Sent \u2713';
-            btn.style.background = '#4a7c59';
-            setTimeout(() => {
-                btn.innerHTML = 'Send Message <span>&rarr;</span>';
-                btn.style.background = '';
-                e.target.reset();
-            }, 3000);
+        // Popup system
+        function showPopup(type, errorMsg) {
+            const overlay = document.getElementById('popup-overlay');
+            const modal = overlay.querySelector('.popup-modal');
+            const icon = overlay.querySelector('.popup-icon');
+            const title = overlay.querySelector('.popup-title');
+            const body = overlay.querySelector('.popup-body');
+            const btn = overlay.querySelector('.popup-btn');
+
+            modal.className = 'popup-modal popup-modal--' + type;
+            icon.className = 'popup-icon popup-icon--' + type;
+            btn.className = 'popup-btn popup-btn--' + type;
+
+            if (type === 'success') {
+                icon.textContent = '\u2713';
+                title.textContent = 'Message Received';
+                body.textContent = 'Thank you for reaching out! Our team will review your message and get back to you at the email address you provided. We typically respond within 1 business day.';
+                btn.textContent = 'Close';
+            } else {
+                icon.textContent = '!';
+                title.textContent = 'Something Went Wrong';
+                body.textContent = errorMsg || 'Please try again or email us at info@adaptedsolutionsco.com.';
+                btn.textContent = 'Try Again';
+            }
+
+            overlay.classList.add('visible');
+            document.body.style.overflow = 'hidden';
+
+            if (type === 'success') {
+                setTimeout(closePopup, 8000);
+            }
         }
+
+        function closePopup() {
+            const overlay = document.getElementById('popup-overlay');
+            overlay.classList.remove('visible');
+            document.body.style.overflow = '';
+        }
+
+        // Contact form handler
+        (function() {
+            const form = document.getElementById('contact-form');
+            if (!form) return;
+            const submitBtn = form.querySelector('.form-submit');
+            const originalBtnHTML = submitBtn.innerHTML;
+
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                const honeypot = form.querySelector('[name="website"]').value;
+                if (honeypot) {
+                    showPopup('success');
+                    return;
+                }
+
+                const turnstileToken = form.querySelector('[name="cf-turnstile-response"]')?.value;
+                if (!turnstileToken) {
+                    showPopup('error', 'Please complete the verification checkbox.');
+                    return;
+                }
+
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Sending...';
+
+                try {
+                    const payload = {
+                        name: form.querySelector('[name="name"]').value.trim(),
+                        email: form.querySelector('[name="email"]').value.trim(),
+                        phone: form.querySelector('[name="phone"]').value.trim(),
+                        serviceInterest: form.querySelector('[name="serviceInterest"]').value,
+                        message: form.querySelector('[name="message"]').value.trim(),
+                        honeypot: honeypot,
+                        turnstileToken: turnstileToken
+                    };
+
+                    const res = await fetch('/api/contact', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    const data = await res.json();
+
+                    if (data.success) {
+                        showPopup('success');
+                        form.reset();
+                        if (window.turnstile) turnstile.reset();
+                    } else {
+                        showPopup('error', data.error || 'Something went wrong.');
+                    }
+                } catch {
+                    showPopup('error', 'Network error. Please email us at info@adaptedsolutionsco.com.');
+                } finally {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalBtnHTML;
+                }
+            });
+        })();
     </script>
+
+    <!-- Popup modal -->
+    <div class="popup-overlay" id="popup-overlay" onclick="if(event.target===this)closePopup()">
+        <div class="popup-modal popup-modal--success">
+            <div class="popup-icon popup-icon--success"></div>
+            <div class="popup-title"></div>
+            <div class="popup-body"></div>
+            <button class="popup-btn popup-btn--success" onclick="closePopup()"></button>
+        </div>
+    </div>
 
 </body>
 </html>

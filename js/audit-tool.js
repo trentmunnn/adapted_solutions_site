@@ -169,6 +169,7 @@
 
     var lastResults = null;
     var lastUrl = null;
+    var lastAuditId = null;
 
     window.AuditTool = {
         run: function() {
@@ -203,8 +204,11 @@
             var payload = {
                 type: 'audit_lead',
                 email: email,
+                auditId: lastAuditId,
                 url: lastUrl,
+                domain: lastResults ? lastResults.domain : '',
                 scores: lastResults ? lastResults.scores : {},
+                topIssues: lastResults ? lastResults.topIssues : [],
                 failedChecks: failedChecks,
                 timestamp: new Date().toISOString()
             };
@@ -224,6 +228,7 @@
         reset: function() {
             lastResults = null;
             lastUrl = null;
+            lastAuditId = null;
             renderInput();
         }
     };
@@ -338,6 +343,7 @@
         if (label) label.textContent = 'Complete!';
 
         lastResults = data;
+        lastAuditId = data.auditId || null;
         if (!data.scores && data.checks) {
             data.scores = calcScores(data.checks);
         }

@@ -1,7 +1,7 @@
 const corsHeaders = {
     'Access-Control-Allow-Origin': 'https://adaptedsolutionsco.com',
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
 };
 
 function jsonResponse(data, status = 200) {
@@ -160,7 +160,7 @@ function getTopIssues(checks) {
     return issues;
 }
 
-async function handleAudit(request) {
+async function handleAudit(request, env) {
     let body;
     try { body = await request.json(); } catch { return jsonResponse({ success: false, error: 'Invalid request body' }); }
 
@@ -193,8 +193,32 @@ async function handleAudit(request) {
     const scores = calcScores(checks);
     const topIssues = getTopIssues(checks);
 
+    // Store audit in D1
+    let auditId = null;
+    try {
+        const result = await env.DB.prepare(
+            `INSERT INTO audit_submissions (url, domain, overall_score, aeo_score, geo_score, structured_data_score, content_structure_score, technical_score, top_issues, full_checks)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+        ).bind(
+            url,
+            domain,
+            scores.overall,
+            scores.aeo,
+            scores.geo,
+            scores.structuredData,
+            scores.contentStructure,
+            scores.technical,
+            JSON.stringify(topIssues),
+            JSON.stringify(checks)
+        ).run();
+        auditId = result?.meta?.last_row_id || null;
+    } catch (e) {
+        console.error('D1 insert error:', e);
+    }
+
     return jsonResponse({
         success: true,
+        auditId,
         domain,
         fetchedAt: new Date().toISOString(),
         checks,
@@ -211,19 +235,42 @@ async function handleLead(request, env) {
         return jsonResponse({ success: false, error: 'Invalid email' });
     }
 
-    if (env.N8N_WEBHOOK_URL) {
-        try {
-            await fetch(env.N8N_WEBHOOK_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload),
-            });
-        } catch {
-            // Don't block lead capture if webhook fails
+    try {
+        if (payload.auditId) {
+            await env.DB.prepare(
+                `UPDATE audit_submissions SET email = ?, lead_captured_at = datetime('now') WHERE id = ?`
+            ).bind(payload.email, payload.auditId).run();
+        } else {
+            await env.DB.prepare(
+                `INSERT INTO audit_submissions (url, domain, email, lead_captured_at, overall_score, aeo_score, geo_score, top_issues)
+                 VALUES (?, ?, ?, datetime('now'), ?, ?, ?, ?)`
+            ).bind(
+                payload.url || '',
+                payload.domain || '',
+                payload.email,
+                payload.scores?.overall || null,
+                payload.scores?.aeo || null,
+                payload.scores?.geo || null,
+                payload.topIssues ? JSON.stringify(payload.topIssues) : null
+            ).run();
         }
+    } catch (e) {
+        console.error('D1 lead capture error:', e);
+        return jsonResponse({ success: false, error: 'Failed to save' }, 500);
     }
 
     return jsonResponse({ success: true });
+}
+
+async function handleAdminSubmissions(request, env) {
+    const authHeader = request.headers.get('Authorization') || '';
+    if (authHeader !== `Bearer ${env.ADMIN_TOKEN}`) {
+        return jsonResponse({ error: 'Unauthorized' }, 401);
+    }
+    const { results } = await env.DB.prepare(
+        'SELECT * FROM audit_submissions ORDER BY submitted_at DESC LIMIT 100'
+    ).all();
+    return jsonResponse({ submissions: results });
 }
 
 export default {
@@ -234,8 +281,12 @@ export default {
 
         const url = new URL(request.url);
 
+        if (request.method === 'GET' && url.pathname === '/api/audit/submissions') {
+            return handleAdminSubmissions(request, env);
+        }
+
         if (request.method === 'POST' && url.pathname === '/api/audit') {
-            return handleAudit(request);
+            return handleAudit(request, env);
         }
 
         if (request.method === 'POST' && url.pathname === '/api/audit-lead') {

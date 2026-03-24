@@ -1,0 +1,15 @@
+name = "adapted-contact-worker"
+main = "src/index.js"
+compatibility_date = "2024-09-23"
+
+routes = [
+  { pattern = "adaptedsolutionsco.com/api/contact*", zone_name = "adaptedsolutionsco.com" }
+]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "adapted-db"
+database_id = "b0979e62-015e-4d5d-886d-015c5952424f"
+
+[vars]
+ALLOWED_ORIGINS = "https://adaptedsolutionsco.com,https://www.adaptedsolutionsco.com"
