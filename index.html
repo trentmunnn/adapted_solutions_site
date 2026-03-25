@@ -477,19 +477,21 @@
         }
 
         .hero-ctas {
-            display: flex;
-            gap: 14px;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            max-width: 620px;
             margin-top: 1.5rem;
             opacity: 0;
             animation: fadeSlideUp 0.6s ease 1s forwards;
         }
 
         .hero-cta {
-            display: inline-flex;
+            display: flex;
             align-items: center;
+            justify-content: center;
             gap: 1rem;
-            padding: 1rem 2.5rem;
+            padding: 1rem 2rem;
             font-family: var(--font-mono);
             font-size: 0.75rem;
             font-weight: 500;
@@ -519,10 +521,11 @@
 
         /* ─── HERO SECONDARY CTA ─── */
         .hero-cta-secondary {
-            display: inline-flex;
+            display: flex;
             align-items: center;
+            justify-content: center;
             gap: 1rem;
-            padding: 1rem 2.5rem;
+            padding: 1rem 2rem;
             font-family: var(--font-mono);
             font-size: 0.75rem;
             font-weight: 500;
@@ -1813,6 +1816,7 @@
 
         @media (max-width: 640px) {
             .hero-stats-row { grid-template-columns: 1fr; }
+            .hero-ctas { grid-template-columns: 1fr; }
             .dv-stat-block { flex-direction: column; gap: 1rem; }
             .dv-stat-num { font-size: 3.5rem; }
             .dv-explainer { grid-template-columns: 1fr; }
