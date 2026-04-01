@@ -341,8 +341,9 @@ async function showClientDetail(clientId) {
               '<td>' + statusBadge(a.status) + '</td>' +
               '<td style="white-space:nowrap">' +
                 (a.status === 'complete' ? '<button class="btn btn-ghost btn-sm" onclick="viewReport(\'' + a.id + '\')">Report</button> ' : '') +
-                (a.status === 'complete' && a.share_token ? '<button class="btn btn-ghost btn-sm" onclick="copyShareLink(\'' + a.id + '\',\'' + a.share_token + '\')">Share</button>' : '') +
-                (a.status === 'running' ? '<button class="btn btn-ghost btn-sm" onclick="pollAudit(\'' + a.id + '\',\'' + client.id + '\')"><span class="spinner"></span> Polling</button>' : '') +
+                (a.status === 'complete' && a.share_token ? '<button class="btn btn-ghost btn-sm" onclick="copyShareLink(\'' + a.id + '\',\'' + a.share_token + '\')">Share</button> ' : '') +
+                (a.status === 'running' ? '<button class="btn btn-ghost btn-sm" onclick="pollAudit(\'' + a.id + '\',\'' + client.id + '\')"><span class="spinner"></span> Polling</button> ' : '') +
+                '<button class="btn btn-ghost btn-sm" style="color:var(--red)" onclick="deleteAudit(\'' + a.id + '\',\'' + client.id + '\')">Delete</button>' +
               '</td></tr>';
           }).join('') + '</tbody></table>' : '<div style="text-align:center;color:var(--muted);padding:20px">No audits yet.</div>'}
       </div>`;
@@ -391,6 +392,15 @@ function viewReport(auditId) {
 function copyShareLink(auditId, shareToken) {
   const url = location.origin + '/api/audits/report/' + auditId + '?token=' + shareToken;
   navigator.clipboard.writeText(url).then(() => toast('Share link copied!', 'success'));
+}
+
+async function deleteAudit(auditId, clientId) {
+  if (!confirm('Delete this audit? This cannot be undone.')) return;
+  try {
+    await api('/' + auditId, { method: 'DELETE' });
+    toast('Audit deleted', 'success');
+    showClientDetail(clientId);
+  } catch (e) { toast('Failed to delete: ' + e.message, 'error'); }
 }
 
 // === ADD / EDIT CLIENT ===
