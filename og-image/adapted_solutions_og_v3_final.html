@@ -1,0 +1,37 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+.og-wrap { padding: 1rem 0 0.5rem; }
+.og-frame { background: var(--color-background-secondary); border-radius: var(--border-radius-lg); padding: 16px; width: 100%; }
+.og-label { font-size: 11px; color: var(--color-text-tertiary); margin-bottom: 10px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; }
+canvas { display: block; width: 100%; height: auto; border-radius: 6px; }
+.og-actions { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+.og-actions button { font-size: 13px; padding: 7px 16px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-secondary); background: transparent; color: var(--color-text-primary); cursor: pointer; }
+.og-actions button:hover { background: var(--color-background-secondary); }
+.og-actions button.primary { background: #c4a35a; color: #1a0e00; border-color: #c4a35a; font-weight: 500; }
+.og-hint { font-size: 12px; color: var(--color-text-tertiary); margin-top: 8px; line-height: 1.5; }
+</style>
+
+<div class="og-wrap">
+  <div class="og-frame">
+    <div class="og-label">OG Image — 1200 × 630px</div>
+    <canvas id="ogCanvas" width="1200" height="630"></canvas>
+    <div class="og-actions">
+      <button class="primary" onclick="downloadOG()">Download og-image.png</button>
+      <button onclick="copyPath()">Copy save path</button>
+    </div>
+    <div class="og-hint" id="ogHint">Move downloaded file to: C:\Users\trent\adapted_solutions_site\og-image.png</div>
+  </div>
+</div>
+
+<script>
+const GOLD      = '#c4a35a';
+const GOLD_A45  = 'rgba(196,163,90,0.45)';
+const GOLD_A18  = 'rgba(196,163,90,0.18)';
+const GOLD_A07  = 'rgba(196,163,90,0.07)';
+const BG        = '#0a0a0a';
+const TEXT      = '#e8e4dc';
+const MUTED     = 'rgba(232,228,220,0.52)';
+const MUTED_DIM = 'rgba(232,228,220,0.18)';
+
+const LOGO_B64 = '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

@@ -1,0 +1,12 @@
+name = "visibility-audit-worker"
+main = "src/index.js"
+compatibility_date = "2024-12-01"
+
+routes = [
+  { pattern = "adaptedsolutionsco.com/api/audits/*", zone_name = "adaptedsolutionsco.com" }
+]
+
+[[d1_databases]]
+binding = "AUDIT_DB"
+database_name = "visibility-audits"
+database_id = "e79e6326-4beb-4a26-bfe9-59865e9a6ddd"

@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Visibility Audits — Admin | Adapted Solutions</title>
+<meta name="robots" content="noindex, nofollow">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #c4a35a; --dark: #0d1117; --card: #161b22; --border: #30363d;
+  --red: #f85149; --yellow: #d29922; --green: #3fb950; --blue: #58a6ff;
+  --purple: #bc8cff; --muted: #8b949e; --white: #e6edf3;
+  --sidebar-w: 240px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: var(--dark); color: var(--white); font-family: 'Instrument Sans', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+.mono { font-family: 'DM Mono', monospace; }
+
+/* Layout */
+.app { display: flex; min-height: 100vh; }
+.sidebar { width: var(--sidebar-w); background: var(--card); border-right: 1px solid var(--border); padding: 24px 16px; position: fixed; top: 0; left: 0; bottom: 0; overflow-y: auto; display: flex; flex-direction: column; }
+.sidebar-brand { font-size: 11px; color: var(--gold); letter-spacing: 0.15em; text-transform: uppercase; font-weight: 600; font-family: 'DM Mono', monospace; margin-bottom: 4px; }
+.sidebar-title { font-size: 16px; font-weight: 700; margin-bottom: 24px; }
+.sidebar-nav { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+.nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 8px; font-size: 13px; font-weight: 500; color: var(--muted); cursor: pointer; transition: all 0.15s; border: none; background: none; text-align: left; width: 100%; }
+.nav-item:hover { background: rgba(255,255,255,0.04); color: var(--white); }
+.nav-item.active { background: rgba(196,163,90,0.1); color: var(--gold); }
+.nav-item .icon { font-size: 16px; width: 20px; text-align: center; }
+.sidebar-footer { padding-top: 16px; border-top: 1px solid var(--border); margin-top: auto; }
+.sidebar-footer a { color: var(--muted); font-size: 11px; text-decoration: none; }
+.sidebar-footer a:hover { color: var(--gold); }
+
+.main { margin-left: var(--sidebar-w); flex: 1; padding: 32px; max-width: 1100px; }
+.page-title { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+.page-subtitle { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
+
+/* Login */
+.login-container { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
+.login-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 40px; width: 100%; max-width: 380px; text-align: center; }
+.login-card h1 { font-size: 20px; margin-bottom: 8px; }
+.login-card p { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+
+/* Forms */
+input, textarea, select { background: var(--dark); border: 1px solid var(--border); border-radius: 8px; color: var(--white); padding: 10px 14px; font-size: 13px; font-family: inherit; width: 100%; transition: border-color 0.2s; }
+input:focus, textarea:focus, select:focus { outline: none; border-color: var(--gold); }
+textarea { min-height: 80px; resize: vertical; }
+label { font-size: 12px; color: var(--muted); font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; display: block; margin-bottom: 6px; }
+.form-group { margin-bottom: 16px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+/* Buttons */
+.btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; border: 1px solid transparent; transition: all 0.15s; font-family: inherit; }
+.btn-gold { background: var(--gold); color: #0a0a0a; }
+.btn-gold:hover { background: #d4b36a; }
+.btn-ghost { background: none; border-color: var(--border); color: var(--white); }
+.btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+.btn-red { background: rgba(248,81,73,0.15); color: var(--red); border-color: rgba(248,81,73,0.3); }
+.btn-red:hover { background: rgba(248,81,73,0.25); }
+.btn-sm { padding: 6px 12px; font-size: 11px; }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* Cards & Tables */
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 16px; }
+.card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.card-title { font-size: 14px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; font-family: 'DM Mono', monospace; }
+
+table { width: 100%; border-collapse: collapse; }
+th { text-align: left; padding: 10px 12px; color: var(--gold); font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; border-bottom: 2px solid var(--border); }
+td { padding: 12px; border-bottom: 1px solid rgba(48,54,61,0.2); font-size: 13px; }
+tr:hover { background: rgba(255,255,255,0.02); }
+
+/* Badges */
+.badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+.badge-red { background: rgba(248,81,73,0.15); color: var(--red); }
+.badge-green { background: rgba(63,185,80,0.15); color: var(--green); }
+.badge-yellow { background: rgba(210,153,34,0.15); color: var(--yellow); }
+.badge-blue { background: rgba(88,166,255,0.15); color: var(--blue); }
+.badge-muted { background: rgba(139,148,158,0.15); color: var(--muted); }
+
+/* Score circle */
+.score-circle { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; font-family: 'DM Mono', monospace; font-weight: 700; font-size: 14px; }
+
+/* Toast */
+.toast { position: fixed; bottom: 24px; right: 24px; padding: 12px 20px; border-radius: 8px; font-size: 13px; font-weight: 500; z-index: 1000; animation: slideIn 0.3s; }
+.toast-success { background: var(--green); color: #0a0a0a; }
+.toast-error { background: var(--red); color: white; }
+@keyframes slideIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+/* Modal */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100; display: flex; align-items: center; justify-content: center; padding: 20px; }
+.modal { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 32px; width: 100%; max-width: 680px; max-height: 90vh; overflow-y: auto; }
+.modal h2 { font-size: 18px; margin-bottom: 20px; }
+
+/* Compare */
+.compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.compare-card { background: var(--dark); border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
+.compare-label { font-size: 10px; color: var(--gold); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; }
+.compare-score { font-size: 28px; font-weight: 700; font-family: 'DM Mono', monospace; }
+.compare-delta { font-size: 14px; font-weight: 600; margin-left: 8px; }
+
+/* Spinner */
+.spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.2); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.6s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .main { margin-left: 0; padding: 16px; }
+  .form-row { grid-template-columns: 1fr; }
+  .compare-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-view" class="login-container">
+  <div class="login-card">
+    <div style="font-size:11px;color:var(--gold);letter-spacing:0.15em;text-transform:uppercase;font-family:'DM Mono',monospace;margin-bottom:16px">Adapted Solutions</div>
+    <h1>Visibility Audits</h1>
+    <p>Enter your admin token to continue.</p>
+    <div class="form-group">
+      <input type="password" id="login-token" placeholder="Bearer token" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <button class="btn btn-gold" style="width:100%" onclick="doLogin()">Sign In</button>
+    <div id="login-error" style="color:var(--red);font-size:12px;margin-top:12px;display:none"></div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app-view" class="app" style="display:none">
+  <aside class="sidebar">
+    <div class="sidebar-brand">Adapted Solutions</div>
+    <div class="sidebar-title">Audit Admin</div>
+    <nav class="sidebar-nav">
+      <button class="nav-item active" data-view="clients" onclick="showView('clients')">
+        <span class="icon">&#x1f4cb;</span> Clients
+      </button>
+      <button class="nav-item" data-view="compare" onclick="showView('compare')">
+        <span class="icon">&#x1f4ca;</span> Compare
+      </button>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="/" style="display:block;margin-bottom:8px">&larr; Back to site</a>
+      <a href="#" onclick="doLogout();return false">Sign out</a>
+    </div>
+  </aside>
+
+  <main class="main">
+    <!-- CLIENTS VIEW -->
+    <div id="view-clients">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
+        <div>
+          <h1 class="page-title">Clients</h1>
+          <p class="page-subtitle">Manage clients and run visibility audits.</p>
+        </div>
+        <button class="btn btn-gold" onclick="showAddClient()">+ Add Client</button>
+      </div>
+      <div id="clients-list"></div>
+    </div>
+
+    <!-- CLIENT DETAIL VIEW -->
+    <div id="view-detail" style="display:none">
+      <button class="btn btn-ghost btn-sm" onclick="showView('clients')" style="margin-bottom:16px">&larr; Back to clients</button>
+      <div id="detail-content"></div>
+    </div>
+
+    <!-- COMPARE VIEW -->
+    <div id="view-compare" style="display:none">
+      <h1 class="page-title">Compare Audits</h1>
+      <p class="page-subtitle">Select two audits to compare side-by-side.</p>
+      <div class="card">
+        <div class="form-row" style="margin-bottom:16px">
+          <div class="form-group">
+            <label>Audit 1</label>
+            <select id="compare-a"></select>
+          </div>
+          <div class="form-group">
+            <label>Audit 2</label>
+            <select id="compare-b"></select>
+          </div>
+        </div>
+        <button class="btn btn-gold" onclick="runCompare()">Compare</button>
+      </div>
+      <div id="compare-results"></div>
+    </div>
+  </main>
+</div>
+
+<!-- MODAL CONTAINER -->
+<div id="modal-root"></div>
+
+<script>
+const API = '/api/audits';
+let TOKEN = localStorage.getItem('audit_token') || '';
+let clients = [];
+let allAudits = [];
+
+// === AUTH ===
+function headers() { return { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + TOKEN }; }
+
+async function api(path, opts = {}) {
+  const resp = await fetch(API + path, { headers: headers(), ...opts });
+  if (resp.status === 401) { doLogout(); throw new Error('Unauthorized'); }
+  if (resp.headers.get('content-type')?.includes('text/html')) return resp.text();
+  return resp.json();
+}
+
+async function doLogin() {
+  TOKEN = document.getElementById('login-token').value.trim();
+  if (!TOKEN) return;
+  try {
+    await api('/clients');
+    localStorage.setItem('audit_token', TOKEN);
+    document.getElementById('login-view').style.display = 'none';
+    document.getElementById('app-view').style.display = 'flex';
+    loadClients();
+  } catch {
+    document.getElementById('login-error').style.display = 'block';
+    document.getElementById('login-error').textContent = 'Invalid token.';
+  }
+}
+
+function doLogout() {
+  TOKEN = '';
+  localStorage.removeItem('audit_token');
+  document.getElementById('app-view').style.display = 'none';
+  document.getElementById('login-view').style.display = 'flex';
+}
+
+// === VIEWS ===
+function showView(name) {
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.toggle('active', n.dataset.view === name));
+  document.getElementById('view-clients').style.display = name === 'clients' ? '' : 'none';
+  document.getElementById('view-detail').style.display = name === 'detail' ? '' : 'none';
+  document.getElementById('view-compare').style.display = name === 'compare' ? '' : 'none';
+  if (name === 'clients') loadClients();
+  if (name === 'compare') loadCompareOptions();
+}
+
+// === CLIENTS ===
+async function loadClients() {
+  try {
+    clients = await api('/clients');
+    renderClients();
+  } catch (e) { toast('Failed to load clients: ' + e.message, 'error'); }
+}
+
+function renderClients() {
+  const el = document.getElementById('clients-list');
+  if (!clients.length) {
+    el.innerHTML = '<div class="card" style="text-align:center;color:var(--muted);padding:40px">No clients yet. Click "+ Add Client" to get started.</div>';
+    return;
+  }
+  el.innerHTML = '<table><thead><tr><th>Client</th><th>Domain</th><th>Location</th><th style="text-align:center">Score</th><th style="text-align:center">Audits</th><th>Last Audit</th><th></th></tr></thead><tbody>' +
+    clients.map(c => {
+      const scoreColor = !c.latest_score ? 'var(--muted)' : c.latest_score <= 30 ? 'var(--red)' : c.latest_score <= 60 ? 'var(--yellow)' : 'var(--green)';
+      const statusBadge = c.latest_status === 'running' ? '<span class="badge badge-blue"><span class="spinner"></span> Running</span>' :
+        c.latest_status === 'failed' ? '<span class="badge badge-red">Failed</span>' : '';
+      return '<tr>' +
+        '<td><strong style="cursor:pointer;color:var(--white)" onclick="showClientDetail(\'' + c.id + '\')">' + esc(c.name) + '</strong></td>' +
+        '<td class="mono" style="font-size:11px;color:var(--muted)">' + esc(c.domain) + '</td>' +
+        '<td style="color:var(--muted)">' + esc(c.location || '—') + '</td>' +
+        '<td style="text-align:center"><div class="score-circle" style="background:' + scoreColor + '20;color:' + scoreColor + '">' + (c.latest_score ?? '—') + '</div></td>' +
+        '<td style="text-align:center;color:var(--muted)">' + (c.audit_count || 0) + '</td>' +
+        '<td style="color:var(--muted);font-size:12px">' + (c.latest_audit_date ? formatDate(c.latest_audit_date) : '—') + ' ' + statusBadge + '</td>' +
+        '<td><button class="btn btn-gold btn-sm" onclick="runAudit(\'' + c.id + '\')">Run Audit</button></td></tr>';
+    }).join('') + '</tbody></table>';
+}
+
+// === CLIENT DETAIL ===
+async function showClientDetail(clientId) {
+  showView('detail');
+  const el = document.getElementById('detail-content');
+  el.innerHTML = '<div style="text-align:center;padding:40px"><span class="spinner"></span></div>';
+
+  try {
+    const [client, history] = await Promise.all([
+      api('/clients/' + clientId),
+      api('/history/' + clientId),
+    ]);
+
+    const keywords = safeJSON(client.keywords, []);
+    const prompts = safeJSON(client.prompts, []);
+    const detection = safeJSON(client.detection_terms, {});
+
+    el.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:24px">
+        <div>
+          <h1 class="page-title">${esc(client.name)}</h1>
+          <p class="page-subtitle">${esc(client.domain)} ${client.location ? '• ' + esc(client.location) : ''}</p>
+          ${client.description ? '<p style="color:var(--muted);font-size:13px;max-width:600px">' + esc(client.description) + '</p>' : ''}
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-gold" onclick="runAudit('${client.id}')">Run Audit</button>
+          <button class="btn btn-ghost" onclick="showEditClient('${client.id}')">Edit</button>
+          <button class="btn btn-red btn-sm" onclick="deleteClient('${client.id}','${esc(client.name)}')">Delete</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><span class="card-title">Config</span></div>
+        <div class="form-row">
+          <div>
+            <label>Keywords (${keywords.length})</label>
+            <div style="font-size:12px;color:var(--muted);max-height:120px;overflow-y:auto">
+              ${keywords.map(k => '<div style="padding:2px 0"><span style="color:var(--white)">' + esc(k.keyword) + '</span> <span class="badge badge-muted" style="font-size:9px">' + k.volume + '</span></div>').join('')}
+            </div>
+          </div>
+          <div>
+            <label>LLM Prompts (${prompts.length})</label>
+            <div style="font-size:12px;color:var(--muted);max-height:120px;overflow-y:auto">
+              ${prompts.map(p => '<div style="padding:2px 0">' + esc(p) + '</div>').join('')}
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:12px">
+          <label>Detection Terms</label>
+          <div style="font-size:12px;color:var(--muted)">
+            <strong style="color:var(--white)">Names:</strong> ${(detection.names || []).join(', ')} &nbsp;
+            <strong style="color:var(--white)">Domains:</strong> ${(detection.domains || []).join(', ')} &nbsp;
+            <strong style="color:var(--white)">Aliases:</strong> ${(detection.aliases || []).join(', ')}
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><span class="card-title">Audit History</span></div>
+        ${history.length ? '<table><thead><tr><th>Date</th><th style="text-align:center">SEO</th><th style="text-align:center">AEO</th><th style="text-align:center">LLM</th><th style="text-align:center">Presence</th><th style="text-align:center">Total</th><th>Status</th><th></th></tr></thead><tbody>' +
+          history.map(a => {
+            const sc = a.score_total;
+            const color = !sc ? 'var(--muted)' : sc <= 30 ? 'var(--red)' : sc <= 60 ? 'var(--yellow)' : 'var(--green)';
+            return '<tr>' +
+              '<td class="mono" style="font-size:11px">' + formatDate(a.started_at) + '</td>' +
+              '<td style="text-align:center"><span class="mono">' + (a.score_seo ?? '—') + '</span></td>' +
+              '<td style="text-align:center"><span class="mono">' + (a.score_aeo ?? '—') + '</span></td>' +
+              '<td style="text-align:center"><span class="mono">' + (a.score_llm ?? '—') + '</span></td>' +
+              '<td style="text-align:center"><span class="mono">' + (a.score_presence ?? '—') + '</span></td>' +
+              '<td style="text-align:center"><span class="mono" style="color:' + color + ';font-weight:700">' + (sc ?? '—') + '</span></td>' +
+              '<td>' + statusBadge(a.status) + '</td>' +
+              '<td style="white-space:nowrap">' +
+                (a.status === 'complete' ? '<button class="btn btn-ghost btn-sm" onclick="viewReport(\'' + a.id + '\')">Report</button> ' : '') +
+                (a.status === 'complete' && a.share_token ? '<button class="btn btn-ghost btn-sm" onclick="copyShareLink(\'' + a.id + '\',\'' + a.share_token + '\')">Share</button>' : '') +
+                (a.status === 'running' ? '<button class="btn btn-ghost btn-sm" onclick="pollAudit(\'' + a.id + '\',\'' + client.id + '\')"><span class="spinner"></span> Polling</button>' : '') +
+              '</td></tr>';
+          }).join('') + '</tbody></table>' : '<div style="text-align:center;color:var(--muted);padding:20px">No audits yet.</div>'}
+      </div>`;
+  } catch (e) {
+    el.innerHTML = '<div class="card" style="color:var(--red)">Error: ' + esc(e.message) + '</div>';
+  }
+}
+
+// === ACTIONS ===
+async function runAudit(clientId) {
+  try {
+    toast('Starting audit...', 'success');
+    const result = await api('/run', {
+      method: 'POST',
+      body: JSON.stringify({ client_id: clientId }),
+    });
+    toast('Audit started! Polling for results...', 'success');
+    pollAudit(result.audit_id, clientId);
+  } catch (e) { toast('Failed: ' + e.message, 'error'); }
+}
+
+let pollTimers = {};
+function pollAudit(auditId, clientId) {
+  if (pollTimers[auditId]) return;
+  pollTimers[auditId] = setInterval(async () => {
+    try {
+      const audit = await api('/' + auditId);
+      if (audit.status !== 'running') {
+        clearInterval(pollTimers[auditId]);
+        delete pollTimers[auditId];
+        toast(audit.status === 'complete' ? 'Audit complete! Score: ' + audit.score_total + '/100' : 'Audit failed.', audit.status === 'complete' ? 'success' : 'error');
+        if (document.getElementById('view-detail').style.display !== 'none') {
+          showClientDetail(clientId);
+        } else {
+          loadClients();
+        }
+      }
+    } catch {}
+  }, 5000);
+}
+
+function viewReport(auditId) {
+  window.open(API + '/report/' + auditId + '?token=' + TOKEN, '_blank');
+}
+
+function copyShareLink(auditId, shareToken) {
+  const url = location.origin + '/api/audits/report/' + auditId + '?token=' + shareToken;
+  navigator.clipboard.writeText(url).then(() => toast('Share link copied!', 'success'));
+}
+
+// === ADD / EDIT CLIENT ===
+function showAddClient() {
+  showModal('Add Client', `
+    <div class="form-row">
+      <div class="form-group"><label>Name</label><input id="m-name" placeholder="Business Name"></div>
+      <div class="form-group"><label>Domain</label><input id="m-domain" placeholder="example.com"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Location</label><input id="m-location" placeholder="City, State"></div>
+      <div class="form-group"><label>Description</label><input id="m-description" placeholder="Brief description"></div>
+    </div>
+    <div class="form-group"><label>Keywords (JSON array)</label><textarea id="m-keywords" placeholder='[{"keyword":"...","volume":"High","category":"..."}]'></textarea></div>
+    <div class="form-group"><label>LLM Prompts (JSON array)</label><textarea id="m-prompts" placeholder='["prompt 1","prompt 2"]'></textarea></div>
+    <div class="form-group"><label>Detection Terms (JSON)</label><textarea id="m-detection" placeholder='{"names":[],"domains":[],"aliases":[]}'></textarea></div>
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-gold" onclick="saveNewClient()">Create Client</button>
+    </div>
+  `);
+}
+
+async function saveNewClient() {
+  try {
+    const body = {
+      name: document.getElementById('m-name').value,
+      domain: document.getElementById('m-domain').value,
+      location: document.getElementById('m-location').value,
+      description: document.getElementById('m-description').value,
+      keywords: JSON.parse(document.getElementById('m-keywords').value || '[]'),
+      prompts: JSON.parse(document.getElementById('m-prompts').value || '[]'),
+      detection_terms: JSON.parse(document.getElementById('m-detection').value || '{"names":[],"domains":[],"aliases":[]}'),
+    };
+    await api('/clients', { method: 'POST', body: JSON.stringify(body) });
+    closeModal();
+    toast('Client created!', 'success');
+    loadClients();
+  } catch (e) { toast('Error: ' + e.message, 'error'); }
+}
+
+async function showEditClient(clientId) {
+  const client = await api('/clients/' + clientId);
+  showModal('Edit Client', `
+    <div class="form-row">
+      <div class="form-group"><label>Name</label><input id="m-name" value="${esc(client.name)}"></div>
+      <div class="form-group"><label>Domain</label><input id="m-domain" value="${esc(client.domain)}"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Location</label><input id="m-location" value="${esc(client.location || '')}"></div>
+      <div class="form-group"><label>Description</label><input id="m-description" value="${esc(client.description || '')}"></div>
+    </div>
+    <div class="form-group"><label>Keywords (JSON)</label><textarea id="m-keywords">${esc(client.keywords)}</textarea></div>
+    <div class="form-group"><label>LLM Prompts (JSON)</label><textarea id="m-prompts">${esc(client.prompts)}</textarea></div>
+    <div class="form-group"><label>Detection Terms (JSON)</label><textarea id="m-detection">${esc(client.detection_terms)}</textarea></div>
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-gold" onclick="updateClient('${clientId}')">Save Changes</button>
+    </div>
+  `);
+}
+
+async function updateClient(clientId) {
+  try {
+    const body = {
+      name: document.getElementById('m-name').value,
+      domain: document.getElementById('m-domain').value,
+      location: document.getElementById('m-location').value,
+      description: document.getElementById('m-description').value,
+      keywords: JSON.parse(document.getElementById('m-keywords').value || '[]'),
+      prompts: JSON.parse(document.getElementById('m-prompts').value || '[]'),
+      detection_terms: JSON.parse(document.getElementById('m-detection').value || '{}'),
+    };
+    await api('/clients/' + clientId, { method: 'PUT', body: JSON.stringify(body) });
+    closeModal();
+    toast('Client updated!', 'success');
+    showClientDetail(clientId);
+  } catch (e) { toast('Error: ' + e.message, 'error'); }
+}
+
+async function deleteClient(clientId, name) {
+  if (!confirm('Delete "' + name + '" and all its audits? This cannot be undone.')) return;
+  try {
+    await api('/clients/' + clientId, { method: 'DELETE' });
+    toast('Client deleted.', 'success');
+    showView('clients');
+  } catch (e) { toast('Error: ' + e.message, 'error'); }
+}
+
+// === COMPARE ===
+async function loadCompareOptions() {
+  try {
+    clients = await api('/clients');
+    allAudits = [];
+    for (const c of clients) {
+      const history = await api('/history/' + c.id);
+      for (const a of history) {
+        if (a.status === 'complete') allAudits.push({ ...a, client_name: c.name });
+      }
+    }
+    const selA = document.getElementById('compare-a');
+    const selB = document.getElementById('compare-b');
+    const opts = allAudits.map(a => '<option value="' + a.id + '">' + esc(a.client_name) + ' — ' + formatDate(a.started_at) + ' (' + a.score_total + '/100)</option>').join('');
+    selA.innerHTML = opts;
+    selB.innerHTML = opts;
+    if (allAudits.length > 1) selB.selectedIndex = 1;
+  } catch (e) { toast('Error: ' + e.message, 'error'); }
+}
+
+async function runCompare() {
+  const id1 = document.getElementById('compare-a').value;
+  const id2 = document.getElementById('compare-b').value;
+  if (!id1 || !id2) return;
+
+  try {
+    const data = await api('/compare/' + id1 + '/' + id2);
+    const a1 = data.audit1, a2 = data.audit2;
+    const el = document.getElementById('compare-results');
+
+    function delta(v1, v2) {
+      const d = v2 - v1;
+      if (d > 0) return '<span class="compare-delta" style="color:var(--green)">+' + d + '</span>';
+      if (d < 0) return '<span class="compare-delta" style="color:var(--red)">' + d + '</span>';
+      return '<span class="compare-delta" style="color:var(--muted)">0</span>';
+    }
+
+    function compareRow(label, k) {
+      return '<tr><td style="color:var(--muted)">' + label + '</td><td class="mono" style="text-align:center">' + (a1[k] ?? 0) + '</td><td class="mono" style="text-align:center">' + (a2[k] ?? 0) + '</td><td style="text-align:center">' + delta(a1[k] ?? 0, a2[k] ?? 0) + '</td></tr>';
+    }
+
+    el.innerHTML = '<div class="card" style="margin-top:16px"><table><thead><tr><th>Category</th><th style="text-align:center">Audit 1</th><th style="text-align:center">Audit 2</th><th style="text-align:center">Delta</th></tr></thead><tbody>' +
+      compareRow('SEO', 'score_seo') + compareRow('AEO', 'score_aeo') + compareRow('LLM', 'score_llm') + compareRow('Presence', 'score_presence') +
+      '<tr style="border-top:2px solid var(--border)"><td><strong>Total</strong></td><td class="mono" style="text-align:center;font-weight:700">' + (a1.score_total ?? 0) + '</td><td class="mono" style="text-align:center;font-weight:700">' + (a2.score_total ?? 0) + '</td><td style="text-align:center">' + delta(a1.score_total ?? 0, a2.score_total ?? 0) + '</td></tr>' +
+      '</tbody></table></div>';
+  } catch (e) { toast('Error: ' + e.message, 'error'); }
+}
+
+// === HELPERS ===
+function esc(s) { const d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
+function safeJSON(s, fb) { if (!s) return fb; if (typeof s === 'object') return s; try { return JSON.parse(s); } catch { return fb; } }
+function formatDate(d) { if (!d) return '—'; return new Date(d + (d.includes('Z') ? '' : 'Z')).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }); }
+function statusBadge(s) {
+  if (s === 'complete') return '<span class="badge badge-green">Complete</span>';
+  if (s === 'running') return '<span class="badge badge-blue"><span class="spinner"></span> Running</span>';
+  if (s === 'failed') return '<span class="badge badge-red">Failed</span>';
+  return '<span class="badge badge-muted">' + s + '</span>';
+}
+function toast(msg, type) {
+  const el = document.createElement('div');
+  el.className = 'toast toast-' + type;
+  el.textContent = msg;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 4000);
+}
+function showModal(title, html) {
+  document.getElementById('modal-root').innerHTML = '<div class="modal-overlay" onclick="if(event.target===this)closeModal()"><div class="modal"><h2>' + title + '</h2>' + html + '</div></div>';
+}
+function closeModal() { document.getElementById('modal-root').innerHTML = ''; }
+
+// === INIT ===
+if (TOKEN) {
+  api('/clients').then(data => {
+    clients = data;
+    document.getElementById('login-view').style.display = 'none';
+    document.getElementById('app-view').style.display = 'flex';
+    renderClients();
+  }).catch(() => { TOKEN = ''; localStorage.removeItem('audit_token'); });
+}
+</script>
+</body>
+</html>
