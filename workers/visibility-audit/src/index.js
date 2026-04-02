@@ -85,42 +85,53 @@ const SEED_CLIENTS = [
   },
 ];
 
-async function ensureTablesAndSeed(db) {
-  // Create tables
-  await db.exec(`
-    CREATE TABLE IF NOT EXISTS clients (
-      id TEXT PRIMARY KEY,
-      name TEXT NOT NULL,
-      slug TEXT NOT NULL UNIQUE,
-      domain TEXT NOT NULL,
-      keywords TEXT NOT NULL,
-      prompts TEXT NOT NULL,
-      detection_terms TEXT NOT NULL,
-      location TEXT,
-      description TEXT,
-      created_at TEXT DEFAULT (datetime('now')),
-      updated_at TEXT DEFAULT (datetime('now'))
-    );
-    CREATE TABLE IF NOT EXISTS audits (
-      id TEXT PRIMARY KEY,
-      client_id TEXT NOT NULL REFERENCES clients(id),
-      status TEXT DEFAULT 'running',
-      share_token TEXT,
-      score_seo INTEGER DEFAULT 0,
-      score_aeo INTEGER DEFAULT 0,
-      score_llm INTEGER DEFAULT 0,
-      score_presence INTEGER DEFAULT 0,
-      score_total INTEGER DEFAULT 0,
-      results_seo TEXT,
-      results_aeo TEXT,
-      results_llm TEXT,
-      results_presence TEXT,
-      started_at TEXT DEFAULT (datetime('now')),
-      completed_at TEXT
-    );
-  `);
+let seeded = false;
 
-  // Check if clients exist
+async function ensureTablesAndSeed(db) {
+  if (seeded) return;
+
+  try {
+    // Check if clients exist — if the table doesn't exist this will throw and we'll create it
+    const existing = await db.prepare('SELECT COUNT(*) as count FROM clients').first();
+    if (existing.count > 0) { seeded = true; return; }
+  } catch {
+    // Tables don't exist yet, create them
+    await db.exec(`
+      CREATE TABLE IF NOT EXISTS clients (
+        id TEXT PRIMARY KEY,
+        name TEXT NOT NULL,
+        slug TEXT NOT NULL UNIQUE,
+        domain TEXT NOT NULL,
+        keywords TEXT NOT NULL,
+        prompts TEXT NOT NULL,
+        detection_terms TEXT NOT NULL,
+        location TEXT,
+        description TEXT,
+        created_at TEXT DEFAULT (datetime('now')),
+        updated_at TEXT DEFAULT (datetime('now'))
+      );
+      CREATE TABLE IF NOT EXISTS audits (
+        id TEXT PRIMARY KEY,
+        client_id TEXT NOT NULL REFERENCES clients(id),
+        status TEXT DEFAULT 'running',
+        share_token TEXT,
+        score_seo INTEGER DEFAULT 0,
+        score_aeo INTEGER DEFAULT 0,
+        score_llm INTEGER DEFAULT 0,
+        score_presence INTEGER DEFAULT 0,
+        score_total INTEGER DEFAULT 0,
+        results_seo TEXT,
+        results_aeo TEXT,
+        results_llm TEXT,
+        results_presence TEXT,
+        report_html TEXT,
+        started_at TEXT DEFAULT (datetime('now')),
+        completed_at TEXT
+      );
+    `);
+  }
+
+  // Seed clients if table is empty
   const existing = await db.prepare('SELECT COUNT(*) as count FROM clients').first();
   if (existing.count === 0) {
     for (const client of SEED_CLIENTS) {
@@ -136,6 +147,15 @@ async function ensureTablesAndSeed(db) {
       ).run();
     }
   }
+
+  // Migrate: add report_html column if missing
+  try {
+    await db.prepare("SELECT report_html FROM audits LIMIT 1").first();
+  } catch {
+    await db.exec("ALTER TABLE audits ADD COLUMN report_html TEXT");
+  }
+
+  seeded = true;
 }
 
 // === ROUTE HANDLERS ===
@@ -241,7 +261,7 @@ async function runAuditChecks(db, env, auditId, client) {
       }),
       checkAEO(client.domain).catch(e => {
         console.error('AEO check failed:', e);
-        return { schema_types_found: [], schema_types_missing: [], has_faq_page: false, has_blog: false, has_llms_txt: false, nap_consistent: false, ai_overview_appearances: 0, service_pages_count: 0, structured_data_score: 0 };
+        return { checks: {}, scores: { overall: 0, aeo: 0, geo: 0, structuredData: 0, geoSignals: 0, contentStructure: 0, technical: 0 } };
       }),
     ]);
 
@@ -320,16 +340,21 @@ export default {
 
     // === SHAREABLE REPORT (no auth needed) ===
     // GET /api/audits/report/:id?token=:shareToken
-    const reportMatch = path.match(/^\/api\/audits\/report\/([a-f0-9]+)$/);
+    const reportMatch = path.match(/^\/api\/audits\/report\/([a-zA-Z0-9-]+)$/);
     if (reportMatch && method === 'GET') {
       const token = url.searchParams.get('token');
       const auditId = reportMatch[1];
 
       // If token provided, serve without auth; otherwise require auth
       if (token) {
-        const audit = await handleReport(db, auditId, token);
+        // If token is the admin token, fetch without share_token filter
+        const isAdmin = token === env.ADMIN_TOKEN;
+        const audit = isAdmin
+          ? await handleReport(db, auditId, null)
+          : await handleReport(db, auditId, token);
         if (!audit) return jsonResponse({ error: 'Not found or invalid token' }, 404, origin);
         if (audit.status !== 'complete') return jsonResponse({ error: 'Audit not yet complete' }, 202, origin);
+        if (audit.report_html) return htmlResponse(audit.report_html);
         const html = generateReport(audit);
         return htmlResponse(html);
       }
@@ -341,6 +366,7 @@ export default {
       const audit = await handleReport(db, auditId, null);
       if (!audit) return jsonResponse({ error: 'Not found' }, 404, origin);
       if (audit.status !== 'complete') return jsonResponse({ error: 'Audit not yet complete' }, 202, origin);
+      if (audit.report_html) return htmlResponse(audit.report_html);
       const html = generateReport(audit);
       return htmlResponse(html);
     }
@@ -367,7 +393,7 @@ export default {
     }
 
     // GET /api/audits/clients/:id — Get client
-    const clientGetMatch = path.match(/^\/api\/audits\/clients\/([a-f0-9]+)$/);
+    const clientGetMatch = path.match(/^\/api\/audits\/clients\/([a-zA-Z0-9-]+)$/);
     if (clientGetMatch && method === 'GET') {
       const client = await handleGetClient(db, clientGetMatch[1]);
       if (!client) return jsonResponse({ error: 'Not found' }, 404, origin);
@@ -387,6 +413,48 @@ export default {
       return jsonResponse(result, 200, origin);
     }
 
+    // POST /api/audits/upload — Upload HTML report
+    if (path === '/api/audits/upload' && method === 'POST') {
+      try {
+        const formData = await request.formData();
+        const file = formData.get('file');
+        const clientId = formData.get('client_id');
+        const scoreSeo = parseInt(formData.get('score_seo') || '0', 10);
+        const scoreAeo = parseInt(formData.get('score_aeo') || '0', 10);
+        const scoreLlm = parseInt(formData.get('score_llm') || '0', 10);
+        const scorePresence = parseInt(formData.get('score_presence') || '0', 10);
+        const auditDate = formData.get('audit_date') || null;
+
+        if (!file || !clientId) {
+          return jsonResponse({ error: 'file and client_id required' }, 400, origin);
+        }
+
+        const client = await db.prepare('SELECT id FROM clients WHERE id = ?').bind(clientId).first();
+        if (!client) return jsonResponse({ error: 'Client not found' }, 404, origin);
+
+        const html = await file.text();
+        const auditId = randomId();
+        const shareToken = randomToken();
+        const scoreTotal = scoreSeo + scoreAeo + scoreLlm + scorePresence;
+
+        // Use provided date or default to now
+        const startedAt = auditDate || new Date().toISOString().replace('T', ' ').replace('Z', '').split('.')[0];
+
+        await db.prepare(`
+          INSERT INTO audits (id, client_id, status, share_token, score_seo, score_aeo, score_llm, score_presence, score_total, report_html, started_at, completed_at)
+          VALUES (?, ?, 'complete', ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `).bind(
+          auditId, clientId, shareToken,
+          scoreSeo, scoreAeo, scoreLlm, scorePresence, scoreTotal,
+          html, startedAt, startedAt
+        ).run();
+
+        return jsonResponse({ audit_id: auditId, share_token: shareToken, score_total: scoreTotal }, 201, origin);
+      } catch (e) {
+        return jsonResponse({ error: 'Upload failed: ' + e.message }, 500, origin);
+      }
+    }
+
     // POST /api/audits/run — Run audit
     if (path === '/api/audits/run' && method === 'POST') {
       const body = await request.json();
@@ -396,22 +464,29 @@ export default {
       return jsonResponse(result, 202, origin);
     }
 
+    // DELETE /api/audits/:id — Delete single audit
+    const auditDeleteMatch = path.match(/^\/api\/audits\/([a-zA-Z0-9-]+)$/);
+    if (auditDeleteMatch && method === 'DELETE') {
+      await db.prepare('DELETE FROM audits WHERE id = ?').bind(auditDeleteMatch[1]).run();
+      return jsonResponse({ deleted: true }, 200, origin);
+    }
+
     // GET /api/audits/history/:client_id — Audit history
-    const historyMatch = path.match(/^\/api\/audits\/history\/([a-f0-9]+)$/);
+    const historyMatch = path.match(/^\/api\/audits\/history\/([a-zA-Z0-9-]+)$/);
     if (historyMatch && method === 'GET') {
       const history = await handleGetHistory(db, historyMatch[1]);
       return jsonResponse(history, 200, origin);
     }
 
     // GET /api/audits/compare/:id1/:id2 — Compare audits
-    const compareMatch = path.match(/^\/api\/audits\/compare\/([a-f0-9]+)\/([a-f0-9]+)$/);
+    const compareMatch = path.match(/^\/api\/audits\/compare\/([a-zA-Z0-9-]+)\/([a-zA-Z0-9-]+)$/);
     if (compareMatch && method === 'GET') {
       const result = await handleCompare(db, compareMatch[1], compareMatch[2]);
       return jsonResponse(result, 200, origin);
     }
 
     // GET /api/audits/:id — Get audit
-    const auditGetMatch = path.match(/^\/api\/audits\/([a-f0-9]+)$/);
+    const auditGetMatch = path.match(/^\/api\/audits\/([a-zA-Z0-9-]+)$/);
     if (auditGetMatch && method === 'GET') {
       const audit = await handleGetAudit(db, auditGetMatch[1]);
       if (!audit) return jsonResponse({ error: 'Not found' }, 404, origin);

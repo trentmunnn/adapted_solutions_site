@@ -294,6 +294,7 @@ async function showClientDetail(clientId) {
         </div>
         <div style="display:flex;gap:8px">
           <button class="btn btn-gold" onclick="runAudit('${client.id}')">Run Audit</button>
+          <button class="btn btn-ghost" onclick="showUploadReport('${client.id}')">Upload Report</button>
           <button class="btn btn-ghost" onclick="showEditClient('${client.id}')">Edit</button>
           <button class="btn btn-red btn-sm" onclick="deleteClient('${client.id}','${esc(client.name)}')">Delete</button>
         </div>
@@ -488,6 +489,89 @@ async function deleteClient(clientId, name) {
     toast('Client deleted.', 'success');
     showView('clients');
   } catch (e) { toast('Error: ' + e.message, 'error'); }
+}
+
+// === UPLOAD REPORT ===
+function showUploadReport(clientId) {
+  const today = new Date().toISOString().split('T')[0];
+  showModal('Upload HTML Report', `
+    <p style="color:var(--muted);font-size:13px;margin-bottom:16px">Upload a report HTML file generated externally. Scores will be auto-detected if the file contains audit data, or you can enter them manually.</p>
+    <div class="form-group">
+      <label>Report HTML File</label>
+      <input type="file" id="m-upload-file" accept=".html,.htm" style="padding:8px" onchange="tryExtractScores(this)">
+    </div>
+    <div class="form-group">
+      <label>Audit Date</label>
+      <input type="date" id="m-upload-date" value="${today}">
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>SEO Score (0-25)</label><input type="number" id="m-upload-seo" min="0" max="25" value="0"></div>
+      <div class="form-group"><label>AEO Score (0-25)</label><input type="number" id="m-upload-aeo" min="0" max="25" value="0"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>LLM Score (0-25)</label><input type="number" id="m-upload-llm" min="0" max="25" value="0"></div>
+      <div class="form-group"><label>Presence Score (0-25)</label><input type="number" id="m-upload-presence" min="0" max="25" value="0"></div>
+    </div>
+    <div id="m-upload-auto" style="display:none;margin-bottom:16px">
+      <span class="badge badge-green">Scores auto-detected from file</span>
+    </div>
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-gold" onclick="submitUpload('${clientId}')">Upload Report</button>
+    </div>
+  `);
+}
+
+function tryExtractScores(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const html = e.target.result;
+    // Try to extract AUDIT data from the generated report format
+    const match = html.match(/const\s+AUDIT\s*=\s*(\{[\s\S]*?\});/);
+    if (match) {
+      try {
+        const data = JSON.parse(match[1]);
+        if (data.score_seo != null) document.getElementById('m-upload-seo').value = data.score_seo;
+        if (data.score_aeo != null) document.getElementById('m-upload-aeo').value = data.score_aeo;
+        if (data.score_llm != null) document.getElementById('m-upload-llm').value = data.score_llm;
+        if (data.score_presence != null) document.getElementById('m-upload-presence').value = data.score_presence;
+        document.getElementById('m-upload-auto').style.display = '';
+        return;
+      } catch {}
+    }
+    document.getElementById('m-upload-auto').style.display = 'none';
+  };
+  reader.readAsText(file);
+}
+
+async function submitUpload(clientId) {
+  const fileInput = document.getElementById('m-upload-file');
+  if (!fileInput.files.length) { toast('Please select an HTML file', 'error'); return; }
+
+  const formData = new FormData();
+  formData.append('file', fileInput.files[0]);
+  formData.append('client_id', clientId);
+  formData.append('score_seo', document.getElementById('m-upload-seo').value);
+  formData.append('score_aeo', document.getElementById('m-upload-aeo').value);
+  formData.append('score_llm', document.getElementById('m-upload-llm').value);
+  formData.append('score_presence', document.getElementById('m-upload-presence').value);
+  formData.append('audit_date', document.getElementById('m-upload-date').value);
+
+  try {
+    const resp = await fetch(API + '/upload', {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + TOKEN },
+      body: formData,
+    });
+    if (resp.status === 401) { doLogout(); throw new Error('Unauthorized'); }
+    const result = await resp.json();
+    if (result.error) throw new Error(result.error);
+    closeModal();
+    toast('Report uploaded! Score: ' + result.score_total + '/100', 'success');
+    showClientDetail(clientId);
+  } catch (e) { toast('Upload failed: ' + e.message, 'error'); }
 }
 
 // === COMPARE ===
