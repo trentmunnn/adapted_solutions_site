@@ -1,0 +1,11 @@
+{
+  "name": "llmready-worker",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "db:init": "wrangler d1 execute llmready --file=sql/schema.sql",
+    "db:init:remote": "wrangler d1 execute llmready --remote --file=sql/schema.sql"
+  }
+}

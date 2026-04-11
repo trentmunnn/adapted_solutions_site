@@ -1,0 +1,24 @@
+name = "llmready-worker"
+main = "src/index.js"
+compatibility_date = "2024-12-01"
+
+routes = [
+  { pattern = "adaptedsolutionsco.com/api/llmready/*", zone_name = "adaptedsolutionsco.com" }
+]
+
+# D1: run `wrangler d1 create llmready` and paste the ID below.
+[[d1_databases]]
+binding = "LLM_DB"
+database_name = "llmready"
+database_id = "REPLACE_WITH_D1_ID"
+
+# R2: run `wrangler r2 bucket create llmready-uploads` first.
+[[r2_buckets]]
+binding = "FILES"
+bucket_name = "llmready-uploads"
+
+# Required secrets (set via `wrangler secret put <NAME>`):
+#   ADMIN_TOKEN          — matches the admin panel bearer token
+#   ANTHROPIC_API_KEY    — Claude API key
+#   CLOUDFLARE_ACCOUNT_ID — for Browser Rendering REST API
+#   CLOUDFLARE_API_TOKEN  — Browser Rendering permission

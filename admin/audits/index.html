@@ -103,12 +103,79 @@ tr:hover { background: rgba(255,255,255,0.02); }
 .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.2); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.6s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
+/* Client modal: keyword / prompt rows */
+.dynamic-list { margin-bottom: 4px; }
+.dynamic-list-row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+.dynamic-list-row input { flex: 1; min-width: 0; }
+.btn-icon { padding: 6px 10px; min-width: 36px; font-size: 16px; line-height: 1; }
+
+/* LLM Site Optimizer */
+.stepper { display: flex; gap: 0; margin-bottom: 24px; border-bottom: 1px solid var(--border); }
+.step { flex: 1; padding: 14px 12px; text-align: center; font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-family: 'DM Mono', monospace; border-bottom: 2px solid transparent; margin-bottom: -1px; cursor: pointer; transition: all 0.15s; background: none; border-left: none; border-right: none; border-top: none; }
+.step:hover:not(.active) { color: var(--white); }
+.step.active { color: var(--gold); border-bottom-color: var(--gold); }
+.step.done { color: var(--green); }
+.step-num { display: inline-block; width: 20px; height: 20px; line-height: 18px; border-radius: 50%; border: 1px solid currentColor; font-size: 10px; margin-right: 6px; }
+
+.url-hero { background: linear-gradient(135deg, rgba(196,163,90,0.08), rgba(196,163,90,0.02)); border: 1px solid rgba(196,163,90,0.3); border-radius: 12px; padding: 32px; margin-bottom: 16px; }
+.url-hero h2 { font-size: 20px; margin-bottom: 6px; }
+.url-hero p { color: var(--muted); font-size: 13px; margin-bottom: 20px; }
+.url-input-row { display: flex; gap: 8px; }
+.url-input-row input { flex: 1; font-size: 14px; padding: 14px 16px; }
+
+.score-hero { display: grid; grid-template-columns: auto 1fr; gap: 32px; align-items: center; padding: 24px; }
+.score-big { width: 140px; height: 140px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: 'DM Mono', monospace; font-weight: 700; border: 4px solid; }
+.score-big .num { font-size: 44px; line-height: 1; }
+.score-big .lbl { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 4px; opacity: 0.7; }
+.score-verdict { font-size: 15px; line-height: 1.55; color: var(--white); }
+.score-verdict em { color: var(--gold); font-style: normal; font-weight: 600; }
+
+.dim-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.dim-card { background: var(--dark); border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
+.dim-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.dim-name { font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); font-family: 'DM Mono', monospace; }
+.dim-score { font-family: 'DM Mono', monospace; font-weight: 700; font-size: 16px; }
+.dim-finding { font-size: 13px; color: var(--white); margin-bottom: 6px; }
+.dim-impact { font-size: 12px; color: var(--muted); font-style: italic; }
+.dim-bar { height: 4px; background: var(--border); border-radius: 2px; margin-top: 10px; overflow: hidden; }
+.dim-bar-fill { height: 100%; border-radius: 2px; transition: width 0.4s; }
+
+.issue-row { display: grid; grid-template-columns: auto 1fr auto; gap: 16px; align-items: center; padding: 14px 0; border-bottom: 1px solid rgba(48,54,61,0.3); }
+.issue-row:last-child { border-bottom: none; }
+.issue-rank { font-family: 'DM Mono', monospace; font-weight: 700; font-size: 18px; width: 32px; text-align: center; }
+.issue-body strong { display: block; font-size: 13px; margin-bottom: 2px; }
+.issue-body span { font-size: 12px; color: var(--muted); }
+
+.fix-card { background: var(--dark); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 12px; overflow: hidden; }
+.fix-head { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; background: rgba(255,255,255,0.02); border-bottom: 1px solid var(--border); }
+.fix-title { font-size: 13px; font-weight: 600; }
+.fix-unlocks { padding: 10px 16px; font-size: 12px; color: var(--gold); background: rgba(196,163,90,0.05); border-bottom: 1px solid var(--border); }
+.fix-code { padding: 14px 16px; font-family: 'DM Mono', monospace; font-size: 11px; color: var(--white); white-space: pre-wrap; word-break: break-all; max-height: 260px; overflow-y: auto; background: #0a0e14; }
+
+.dropzone { border: 2px dashed var(--border); border-radius: 12px; padding: 48px 24px; text-align: center; transition: all 0.2s; cursor: pointer; }
+.dropzone:hover, .dropzone.drag { border-color: var(--gold); background: rgba(196,163,90,0.03); }
+.dropzone-icon { font-size: 36px; margin-bottom: 8px; }
+.dropzone-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+.dropzone-hint { font-size: 12px; color: var(--muted); }
+
+.change-group { margin-bottom: 20px; }
+.change-group-title { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold); font-family: 'DM Mono', monospace; margin-bottom: 10px; }
+.change-item { display: flex; gap: 12px; align-items: flex-start; padding: 12px 16px; background: var(--dark); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 8px; }
+.change-item input[type=checkbox] { width: auto; margin-top: 3px; accent-color: var(--gold); }
+.change-item-body { flex: 1; }
+.change-item-title { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+.change-item-desc { font-size: 12px; color: var(--muted); }
+
+.empty-state { text-align: center; padding: 48px 24px; color: var(--muted); font-size: 13px; }
+
 /* Responsive */
 @media (max-width: 768px) {
   .sidebar { display: none; }
   .main { margin-left: 0; padding: 16px; }
   .form-row { grid-template-columns: 1fr; }
   .compare-grid { grid-template-columns: 1fr; }
+  .dim-grid { grid-template-columns: 1fr; }
+  .score-hero { grid-template-columns: 1fr; text-align: center; }
 }
 </style>
 </head>
@@ -140,6 +207,9 @@ tr:hover { background: rgba(255,255,255,0.02); }
       <button class="nav-item" data-view="compare" onclick="showView('compare')">
         <span class="icon">&#x1f4ca;</span> Compare
       </button>
+      <button class="nav-item" data-view="llmready" onclick="showView('llmready')">
+        <span class="icon">&#x1f916;</span> LLM Site Optimizer
+      </button>
     </nav>
     <div class="sidebar-footer">
       <a href="/" style="display:block;margin-bottom:8px">&larr; Back to site</a>
@@ -164,6 +234,152 @@ tr:hover { background: rgba(255,255,255,0.02); }
     <div id="view-detail" style="display:none">
       <button class="btn btn-ghost btn-sm" onclick="showView('clients')" style="margin-bottom:16px">&larr; Back to clients</button>
       <div id="detail-content"></div>
+    </div>
+
+    <!-- LLM SITE OPTIMIZER VIEW -->
+    <div id="view-llmready" style="display:none">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:8px">
+        <div>
+          <h1 class="page-title">LLM Site Optimizer</h1>
+          <p class="page-subtitle">See any site through the eyes of an LLM, generate precise fixes, and return an optimized codebase.</p>
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="llmReset()">&#x21bb; New Session</button>
+      </div>
+
+      <div class="stepper">
+        <button class="step active" id="llm-step-1" onclick="llmGoStep(1)"><span class="step-num">1</span>Audit URL</button>
+        <button class="step" id="llm-step-2" onclick="llmGoStep(2)"><span class="step-num">2</span>Results</button>
+        <button class="step" id="llm-step-3" onclick="llmGoStep(3)"><span class="step-num">3</span>Fixes</button>
+        <button class="step" id="llm-step-4" onclick="llmGoStep(4)"><span class="step-num">4</span>Upload</button>
+        <button class="step" id="llm-step-5" onclick="llmGoStep(5)"><span class="step-num">5</span>Review</button>
+        <button class="step" id="llm-step-6" onclick="llmGoStep(6)"><span class="step-num">6</span>Download</button>
+      </div>
+
+      <!-- STEP 1: URL INPUT -->
+      <div id="llm-pane-1">
+        <div class="url-hero">
+          <h2>Crawl a site the way an AI does</h2>
+          <p>We render the page server-side (post-JS), then let Claude score it across 8 machine-readability dimensions. Not an SEO audit &mdash; purely LLM visibility.</p>
+          <div class="url-input-row">
+            <input type="url" id="llm-url" placeholder="https://example.com" onkeydown="if(event.key==='Enter')llmRunAudit()">
+            <button class="btn btn-gold" onclick="llmRunAudit()">Analyze &rarr;</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">What we measure</span></div>
+          <div class="dim-grid" id="llm-dim-legend"></div>
+        </div>
+      </div>
+
+      <!-- STEP 2: RESULTS -->
+      <div id="llm-pane-2" style="display:none">
+        <div class="card score-hero" id="llm-score-hero">
+          <div class="score-big" style="border-color:var(--muted);color:var(--muted)"><div class="num">&mdash;</div><div class="lbl">LLM Score</div></div>
+          <div class="score-verdict">Run an audit to see results.</div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">8-Dimension Breakdown</span></div>
+          <div class="dim-grid" id="llm-dim-grid"></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Priority Issues</span></div>
+          <div id="llm-priority-list"><div class="empty-state">No issues loaded.</div></div>
+        </div>
+        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px">
+          <button class="btn btn-ghost" onclick="llmGoStep(1)">&larr; Back</button>
+          <button class="btn btn-gold" onclick="llmGoStep(3)">Generate Fixes &rarr;</button>
+        </div>
+      </div>
+
+      <!-- STEP 3: GENERATED FIXES -->
+      <div id="llm-pane-3" style="display:none">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Generated Fixes</span>
+            <button class="btn btn-ghost btn-sm" onclick="llmGenerateFixes()">&#x21bb; Regenerate</button>
+          </div>
+          <p style="color:var(--muted);font-size:13px;margin-bottom:16px">Claude rewrites every failing dimension into structured, Answer-Engine-friendly output. Preview each fix before applying.</p>
+          <div id="llm-fixes-list"><div class="empty-state">Click &ldquo;Generate Fixes&rdquo; to produce schema, llms.txt, meta, and markdown mirrors.</div></div>
+          <div style="margin-top:16px;text-align:center">
+            <button class="btn btn-gold" onclick="llmGenerateFixes()">Generate Fixes with Claude</button>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px">
+          <button class="btn btn-ghost" onclick="llmGoStep(2)">&larr; Back</button>
+          <button class="btn btn-gold" onclick="llmGoStep(4)">Upload Codebase &rarr;</button>
+        </div>
+      </div>
+
+      <!-- STEP 4: UPLOAD -->
+      <div id="llm-pane-4" style="display:none">
+        <div class="card">
+          <div class="card-header"><span class="card-title">Business Info</span></div>
+          <div class="form-row">
+            <div class="form-group"><label>Business Name</label><input id="llm-biz-name" placeholder="Acme Co"></div>
+            <div class="form-group"><label>Phone</label><input id="llm-biz-phone" placeholder="(555) 555-1234"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Address</label><input id="llm-biz-address" placeholder="123 Main St, City, ST"></div>
+            <div class="form-group"><label>Services (comma-separated)</label><input id="llm-biz-services" placeholder="consulting, design, repair"></div>
+          </div>
+          <div class="form-group"><label>Description</label><textarea id="llm-biz-desc" placeholder="What the business does, who it serves"></textarea></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Upload Codebase</span></div>
+          <div class="dropzone" id="llm-dropzone" onclick="document.getElementById('llm-zip').click()">
+            <div class="dropzone-icon">&#x1f4e6;</div>
+            <div class="dropzone-title">Drag &amp; drop your ZIP here</div>
+            <div class="dropzone-hint">Shopify themes, WordPress themes, static sites, Next.js projects &mdash; auto-detected.<br>Max 100MB. Encrypted at rest. Auto-deleted in 7 days.</div>
+            <input type="file" id="llm-zip" accept=".zip" style="display:none" onchange="llmFileSelected()">
+            <div id="llm-file-name" style="margin-top:12px;color:var(--gold);font-weight:600"></div>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px">
+          <button class="btn btn-ghost" onclick="llmGoStep(3)">&larr; Back</button>
+          <button class="btn btn-gold" onclick="llmAnalyzeUpload()">Analyze Codebase &rarr;</button>
+        </div>
+      </div>
+
+      <!-- STEP 5: REVIEW -->
+      <div id="llm-pane-5" style="display:none">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Review &amp; Approve Changes</span>
+            <span id="llm-platform-badge" class="badge badge-muted">Platform: &mdash;</span>
+          </div>
+          <p style="color:var(--muted);font-size:13px;margin-bottom:20px">Uncheck anything you want to skip. All approved changes will be applied to your codebase.</p>
+          <div id="llm-changes-list"><div class="empty-state">Upload and analyze a codebase to see proposed changes.</div></div>
+        </div>
+        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px">
+          <button class="btn btn-ghost" onclick="llmGoStep(4)">&larr; Back</button>
+          <button class="btn btn-gold" onclick="llmApplyChanges()">Apply Selected &amp; Build ZIP &rarr;</button>
+        </div>
+      </div>
+
+      <!-- STEP 6: DOWNLOAD -->
+      <div id="llm-pane-6" style="display:none">
+        <div class="card" style="text-align:center;padding:48px 24px">
+          <div style="font-size:48px;margin-bottom:12px">&#x2705;</div>
+          <h2 style="font-size:20px;margin-bottom:8px">Optimization Complete</h2>
+          <p style="color:var(--muted);font-size:13px;margin-bottom:24px" id="llm-result-summary">Estimated score lift: &mdash;</p>
+          <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+            <button class="btn btn-gold" onclick="llmDownloadZip()">&#x1f4e6; Download Optimized ZIP</button>
+            <button class="btn btn-ghost" onclick="llmDownloadReport()">&#x1f4ca; Download Change Report</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Upload Instructions</span></div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.8">
+            <strong style="color:var(--white)">Shopify:</strong> Online Store &rarr; Themes &rarr; Edit code &rarr; upload each changed file<br>
+            <strong style="color:var(--white)">WordPress:</strong> Appearance &rarr; Theme Editor, or upload via FTP/cPanel<br>
+            <strong style="color:var(--white)">Static / cPanel:</strong> File Manager &rarr; public_html &rarr; replace files<br>
+            <strong style="color:var(--white)">Next.js / Vercel / Netlify:</strong> commit the changes and re-deploy
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px">
+          <button class="btn btn-ghost" onclick="llmReset()">New Session</button>
+        </div>
+      </div>
     </div>
 
     <!-- COMPARE VIEW -->
@@ -193,6 +409,7 @@ tr:hover { background: rgba(255,255,255,0.02); }
 
 <script>
 const API = '/api/audits';
+const LIST_DEFAULT_ROWS = 5;
 let TOKEN = localStorage.getItem('audit_token') || '';
 let clients = [];
 let allAudits = [];
@@ -235,8 +452,10 @@ function showView(name) {
   document.getElementById('view-clients').style.display = name === 'clients' ? '' : 'none';
   document.getElementById('view-detail').style.display = name === 'detail' ? '' : 'none';
   document.getElementById('view-compare').style.display = name === 'compare' ? '' : 'none';
+  document.getElementById('view-llmready').style.display = name === 'llmready' ? '' : 'none';
   if (name === 'clients') loadClients();
   if (name === 'compare') loadCompareOptions();
+  if (name === 'llmready') llmInit();
 }
 
 // === CLIENTS ===
@@ -404,6 +623,143 @@ async function deleteAudit(auditId, clientId) {
   } catch (e) { toast('Failed to delete: ' + e.message, 'error'); }
 }
 
+// === CLIENT MODAL: KEYWORD / PROMPT LISTS ===
+function keywordItemFromRaw(k) {
+  if (typeof k === 'string') return { keyword: k, volume: '—', category: '' };
+  if (k && typeof k === 'object') {
+    return {
+      keyword: k.keyword || '',
+      volume: k.volume != null && String(k.volume).trim() !== '' ? String(k.volume) : '—',
+      category: k.category != null ? String(k.category) : '',
+    };
+  }
+  return { keyword: '', volume: '—', category: '' };
+}
+
+function appendKeywordRow(container, text, volume, category) {
+  const row = document.createElement('div');
+  row.className = 'dynamic-list-row';
+  row.dataset.volume = volume != null && volume !== '' ? volume : '—';
+  row.dataset.category = category != null ? category : '';
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.placeholder = 'Keyword';
+  input.value = text || '';
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'btn btn-ghost btn-sm btn-icon';
+  btn.textContent = '\u00D7';
+  btn.setAttribute('aria-label', 'Remove keyword row');
+  btn.onclick = function() { removeDynamicRow(btn); };
+  row.appendChild(input);
+  row.appendChild(btn);
+  container.appendChild(row);
+}
+
+function appendPromptRow(container, text) {
+  const row = document.createElement('div');
+  row.className = 'dynamic-list-row';
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.placeholder = 'Prompt';
+  input.value = text || '';
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'btn btn-ghost btn-sm btn-icon';
+  btn.textContent = '\u00D7';
+  btn.setAttribute('aria-label', 'Remove prompt row');
+  btn.onclick = function() { removeDynamicRow(btn); };
+  row.appendChild(input);
+  row.appendChild(btn);
+  container.appendChild(row);
+}
+
+function refreshDynamicRemoveButtons(container) {
+  const rows = container.querySelectorAll('.dynamic-list-row');
+  rows.forEach(row => {
+    const btn = row.querySelector('button.btn-icon');
+    if (btn) btn.style.visibility = rows.length > 1 ? 'visible' : 'hidden';
+  });
+}
+
+function initKeywordList(rawList) {
+  const el = document.getElementById('m-keywords-list');
+  if (!el) return;
+  el.innerHTML = '';
+  const items = Array.isArray(rawList) ? rawList.map(keywordItemFromRaw) : [];
+  const numRows = Math.max(LIST_DEFAULT_ROWS, items.length);
+  for (let i = 0; i < numRows; i++) {
+    const it = items[i] || { keyword: '', volume: '—', category: '' };
+    appendKeywordRow(el, it.keyword, it.volume, it.category);
+  }
+  refreshDynamicRemoveButtons(el);
+}
+
+function initPromptList(rawList) {
+  const el = document.getElementById('m-prompts-list');
+  if (!el) return;
+  el.innerHTML = '';
+  const items = Array.isArray(rawList) ? rawList.filter(p => typeof p === 'string') : [];
+  const numRows = Math.max(LIST_DEFAULT_ROWS, items.length);
+  for (let i = 0; i < numRows; i++) {
+    appendPromptRow(el, items[i] || '');
+  }
+  refreshDynamicRemoveButtons(el);
+}
+
+function addKeywordRow() {
+  const el = document.getElementById('m-keywords-list');
+  if (!el) return;
+  appendKeywordRow(el, '', '—', '');
+  refreshDynamicRemoveButtons(el);
+}
+
+function addPromptRow() {
+  const el = document.getElementById('m-prompts-list');
+  if (!el) return;
+  appendPromptRow(el, '');
+  refreshDynamicRemoveButtons(el);
+}
+
+function removeDynamicRow(btn) {
+  const row = btn.closest('.dynamic-list-row');
+  const container = row && row.parentElement;
+  if (!container) return;
+  const rows = container.querySelectorAll('.dynamic-list-row');
+  if (rows.length <= 1) {
+    const inp = row.querySelector('input');
+    if (inp) inp.value = '';
+    return;
+  }
+  row.remove();
+  refreshDynamicRemoveButtons(container);
+}
+
+function collectKeywords() {
+  const el = document.getElementById('m-keywords-list');
+  if (!el) return [];
+  const out = [];
+  el.querySelectorAll('.dynamic-list-row').forEach(row => {
+    const text = row.querySelector('input')?.value?.trim();
+    if (!text) return;
+    const vol = row.dataset.volume != null && row.dataset.volume !== '' ? row.dataset.volume : '—';
+    const cat = row.dataset.category != null ? row.dataset.category : '';
+    out.push({ keyword: text, volume: vol, category: cat });
+  });
+  return out;
+}
+
+function collectPrompts() {
+  const el = document.getElementById('m-prompts-list');
+  if (!el) return [];
+  const out = [];
+  el.querySelectorAll('.dynamic-list-row').forEach(row => {
+    const text = row.querySelector('input')?.value?.trim();
+    if (text) out.push(text);
+  });
+  return out;
+}
+
 // === ADD / EDIT CLIENT ===
 function showAddClient() {
   showModal('Add Client', `
@@ -415,14 +771,24 @@ function showAddClient() {
       <div class="form-group"><label>Location</label><input id="m-location" placeholder="City, State"></div>
       <div class="form-group"><label>Description</label><input id="m-description" placeholder="Brief description"></div>
     </div>
-    <div class="form-group"><label>Keywords (JSON array)</label><textarea id="m-keywords" placeholder='[{"keyword":"...","volume":"High","category":"..."}]'></textarea></div>
-    <div class="form-group"><label>LLM Prompts (JSON array)</label><textarea id="m-prompts" placeholder='["prompt 1","prompt 2"]'></textarea></div>
+    <div class="form-group">
+      <label>SEO keywords</label>
+      <div id="m-keywords-list" class="dynamic-list"></div>
+      <button type="button" class="btn btn-ghost btn-sm" onclick="addKeywordRow()" style="margin-top:4px">+ Add keyword</button>
+    </div>
+    <div class="form-group">
+      <label>LLM prompts</label>
+      <div id="m-prompts-list" class="dynamic-list"></div>
+      <button type="button" class="btn btn-ghost btn-sm" onclick="addPromptRow()" style="margin-top:4px">+ Add prompt</button>
+    </div>
     <div class="form-group"><label>Detection Terms (JSON)</label><textarea id="m-detection" placeholder='{"names":[],"domains":[],"aliases":[]}'></textarea></div>
     <div style="display:flex;gap:8px;justify-content:flex-end">
       <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
       <button class="btn btn-gold" onclick="saveNewClient()">Create Client</button>
     </div>
   `);
+  initKeywordList([]);
+  initPromptList([]);
 }
 
 async function saveNewClient() {
@@ -432,8 +798,8 @@ async function saveNewClient() {
       domain: document.getElementById('m-domain').value,
       location: document.getElementById('m-location').value,
       description: document.getElementById('m-description').value,
-      keywords: JSON.parse(document.getElementById('m-keywords').value || '[]'),
-      prompts: JSON.parse(document.getElementById('m-prompts').value || '[]'),
+      keywords: collectKeywords(),
+      prompts: collectPrompts(),
       detection_terms: JSON.parse(document.getElementById('m-detection').value || '{"names":[],"domains":[],"aliases":[]}'),
     };
     await api('/clients', { method: 'POST', body: JSON.stringify(body) });
@@ -445,6 +811,8 @@ async function saveNewClient() {
 
 async function showEditClient(clientId) {
   const client = await api('/clients/' + clientId);
+  const kwRaw = safeJSON(client.keywords, []);
+  const prRaw = safeJSON(client.prompts, []);
   showModal('Edit Client', `
     <div class="form-row">
       <div class="form-group"><label>Name</label><input id="m-name" value="${esc(client.name)}"></div>
@@ -454,14 +822,24 @@ async function showEditClient(clientId) {
       <div class="form-group"><label>Location</label><input id="m-location" value="${esc(client.location || '')}"></div>
       <div class="form-group"><label>Description</label><input id="m-description" value="${esc(client.description || '')}"></div>
     </div>
-    <div class="form-group"><label>Keywords (JSON)</label><textarea id="m-keywords">${esc(client.keywords)}</textarea></div>
-    <div class="form-group"><label>LLM Prompts (JSON)</label><textarea id="m-prompts">${esc(client.prompts)}</textarea></div>
+    <div class="form-group">
+      <label>SEO keywords</label>
+      <div id="m-keywords-list" class="dynamic-list"></div>
+      <button type="button" class="btn btn-ghost btn-sm" onclick="addKeywordRow()" style="margin-top:4px">+ Add keyword</button>
+    </div>
+    <div class="form-group">
+      <label>LLM prompts</label>
+      <div id="m-prompts-list" class="dynamic-list"></div>
+      <button type="button" class="btn btn-ghost btn-sm" onclick="addPromptRow()" style="margin-top:4px">+ Add prompt</button>
+    </div>
     <div class="form-group"><label>Detection Terms (JSON)</label><textarea id="m-detection">${esc(client.detection_terms)}</textarea></div>
     <div style="display:flex;gap:8px;justify-content:flex-end">
       <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
       <button class="btn btn-gold" onclick="updateClient('${clientId}')">Save Changes</button>
     </div>
   `);
+  initKeywordList(kwRaw);
+  initPromptList(prRaw);
 }
 
 async function updateClient(clientId) {
@@ -471,8 +849,8 @@ async function updateClient(clientId) {
       domain: document.getElementById('m-domain').value,
       location: document.getElementById('m-location').value,
       description: document.getElementById('m-description').value,
-      keywords: JSON.parse(document.getElementById('m-keywords').value || '[]'),
-      prompts: JSON.parse(document.getElementById('m-prompts').value || '[]'),
+      keywords: collectKeywords(),
+      prompts: collectPrompts(),
       detection_terms: JSON.parse(document.getElementById('m-detection').value || '{}'),
     };
     await api('/clients/' + clientId, { method: 'PUT', body: JSON.stringify(body) });
@@ -643,6 +1021,397 @@ function showModal(title, html) {
   document.getElementById('modal-root').innerHTML = '<div class="modal-overlay" onclick="if(event.target===this)closeModal()"><div class="modal"><h2>' + title + '</h2>' + html + '</div></div>';
 }
 function closeModal() { document.getElementById('modal-root').innerHTML = ''; }
+
+// ===========================================================================
+// LLM SITE OPTIMIZER
+// ===========================================================================
+// Talks to /api/llmready/* — endpoints may not exist yet. The UI degrades
+// gracefully: on 404/fetch-error it shows a "backend not wired up yet" state
+// rather than crashing, so the admin UI is usable for planning/demo.
+// ===========================================================================
+const LLM_API = '/api/llmready';
+const LLM_DIMENSIONS = [
+  { key: 'structured_data',       name: 'Structured Data',       desc: 'JSON-LD / Schema.org coverage' },
+  { key: 'semantic_html',         name: 'Semantic HTML',         desc: 'article / main / heading hierarchy' },
+  { key: 'information_density',   name: 'Information Density',   desc: 'Facts vs. chrome / boilerplate' },
+  { key: 'js_render_dependency',  name: 'JS Render Dependency',  desc: 'Content visible pre-hydration' },
+  { key: 'alt_text',              name: 'Alt Text',              desc: 'Descriptive image context' },
+  { key: 'robots_llms_compliance',name: 'Robots / llms.txt',     desc: 'AI crawler allowances + briefing' },
+  { key: 'meta_canonical',        name: 'Meta &amp; Canonical',  desc: 'Title, OG, Twitter, canonical' },
+  { key: 'anchor_quality',        name: 'Anchor Quality',        desc: 'Descriptive link text' },
+];
+
+let llmState = {
+  step: 1,
+  auditId: null,
+  audit: null,
+  fixes: null,
+  jobId: null,
+  job: null,
+  zipFile: null,
+  approved: {},
+};
+
+function llmInit() {
+  // Render "what we measure" legend on first entry.
+  const legend = document.getElementById('llm-dim-legend');
+  if (legend && !legend.children.length) {
+    legend.innerHTML = LLM_DIMENSIONS.map(d =>
+      '<div class="dim-card">' +
+        '<div class="dim-head"><span class="dim-name">' + d.name + '</span></div>' +
+        '<div class="dim-impact">' + d.desc + '</div>' +
+      '</div>'
+    ).join('');
+  }
+  llmGoStep(llmState.step);
+}
+
+function llmGoStep(n) {
+  llmState.step = n;
+  for (let i = 1; i <= 6; i++) {
+    const pane = document.getElementById('llm-pane-' + i);
+    const step = document.getElementById('llm-step-' + i);
+    if (pane) pane.style.display = i === n ? '' : 'none';
+    if (step) {
+      step.classList.toggle('active', i === n);
+      step.classList.toggle('done', i < n);
+    }
+  }
+}
+
+function llmReset() {
+  llmState = { step: 1, auditId: null, audit: null, fixes: null, jobId: null, job: null, zipFile: null, approved: {} };
+  const urlEl = document.getElementById('llm-url'); if (urlEl) urlEl.value = '';
+  const fnEl = document.getElementById('llm-file-name'); if (fnEl) fnEl.textContent = '';
+  const zipEl = document.getElementById('llm-zip'); if (zipEl) zipEl.value = '';
+  ['llm-biz-name','llm-biz-phone','llm-biz-address','llm-biz-services','llm-biz-desc'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.value = '';
+  });
+  document.getElementById('llm-fixes-list').innerHTML = '<div class="empty-state">Click &ldquo;Generate Fixes&rdquo; to produce schema, llms.txt, meta, and markdown mirrors.</div>';
+  document.getElementById('llm-priority-list').innerHTML = '<div class="empty-state">No issues loaded.</div>';
+  document.getElementById('llm-changes-list').innerHTML = '<div class="empty-state">Upload and analyze a codebase to see proposed changes.</div>';
+  document.getElementById('llm-dim-grid').innerHTML = '';
+  document.getElementById('llm-score-hero').innerHTML = '<div class="score-big" style="border-color:var(--muted);color:var(--muted)"><div class="num">&mdash;</div><div class="lbl">LLM Score</div></div><div class="score-verdict">Run an audit to see results.</div>';
+  llmGoStep(1);
+}
+
+// ---------- STEP 1 → 2: Run audit ----------
+async function llmRunAudit() {
+  const url = document.getElementById('llm-url').value.trim();
+  if (!url) { toast('Enter a URL first', 'error'); return; }
+  try { new URL(url); } catch { toast('That doesn\'t look like a valid URL', 'error'); return; }
+
+  toast('Rendering page and scoring with Claude…', 'success');
+  llmGoStep(2);
+  document.getElementById('llm-score-hero').innerHTML =
+    '<div class="score-big" style="border-color:var(--muted);color:var(--muted)"><div class="num"><span class="spinner"></span></div><div class="lbl">Scoring</div></div>' +
+    '<div class="score-verdict">Claude is analyzing the rendered DOM across 8 dimensions. This usually takes 20–40 seconds.</div>';
+
+  try {
+    const resp = await fetch(LLM_API + '/audit', {
+      method: 'POST',
+      headers: headers(),
+      body: JSON.stringify({ url }),
+    });
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const data = await resp.json();
+    llmState.auditId = data.id || data.audit_id || null;
+    // Worker returns 202 + running status and processes async — poll until complete.
+    if (data.status === 'running' && llmState.auditId) {
+      llmPollAudit(llmState.auditId, url);
+      return;
+    }
+    // If a backend ever returns the completed audit synchronously, just render it.
+    llmState.audit = data;
+    llmRenderAudit(data);
+  } catch (e) {
+    llmRenderAuditStub(url, e);
+  }
+}
+
+let llmPollTimer = null;
+function llmPollAudit(auditId, url) {
+  if (llmPollTimer) clearInterval(llmPollTimer);
+  let ticks = 0;
+  const MAX_TICKS = 40; // ~2 minutes at 3s interval
+  llmPollTimer = setInterval(async () => {
+    ticks++;
+    try {
+      const r = await fetch(LLM_API + '/audit/' + auditId, { headers: headers() });
+      if (r.status === 401) { doLogout(); throw new Error('Unauthorized'); }
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      const audit = await r.json();
+      if (audit.status === 'complete') {
+        clearInterval(llmPollTimer); llmPollTimer = null;
+        llmState.audit = audit;
+        llmRenderAudit(audit);
+        toast('Audit complete — score ' + (audit.overall_score ?? '—') + '/100', 'success');
+      } else if (audit.status === 'failed') {
+        clearInterval(llmPollTimer); llmPollTimer = null;
+        toast('Audit failed: ' + (audit.error || 'unknown error'), 'error');
+        llmRenderAuditStub(url, new Error(audit.error || 'Audit failed'));
+      } else if (ticks >= MAX_TICKS) {
+        clearInterval(llmPollTimer); llmPollTimer = null;
+        toast('Audit is taking longer than expected — check back in a minute', 'error');
+      }
+    } catch (e) {
+      if (ticks >= MAX_TICKS) {
+        clearInterval(llmPollTimer); llmPollTimer = null;
+        llmRenderAuditStub(url, e);
+      }
+    }
+  }, 3000);
+}
+
+function llmRenderAuditStub(url, err) {
+  // Backend not wired up — show an actionable placeholder with all fields
+  // so the admin UI is reviewable without a running Worker.
+  toast('Backend /api/llmready/audit not available (' + err.message + ') — showing scaffold', 'error');
+  const stub = {
+    overall_score: null,
+    verdict: 'Backend not yet deployed. Once /api/llmready/audit is wired to Cloudflare Browser Rendering + Claude, results for ' + url + ' will render here.',
+    dimensions: Object.fromEntries(LLM_DIMENSIONS.map(d => [d.key, {
+      score: null, finding: 'Awaiting backend.', details: 'Stub data.', impact: d.desc,
+    }])),
+    priority_issues: [],
+  };
+  llmState.audit = stub;
+  llmRenderAudit(stub);
+}
+
+function llmRenderAudit(a) {
+  // Score hero
+  const score = a.overall_score;
+  const color = score == null ? 'var(--muted)' : score <= 30 ? 'var(--red)' : score <= 60 ? 'var(--yellow)' : 'var(--green)';
+  document.getElementById('llm-score-hero').innerHTML =
+    '<div class="score-big" style="border-color:' + color + ';color:' + color + '">' +
+      '<div class="num">' + (score ?? '—') + '</div><div class="lbl">of 100</div>' +
+    '</div>' +
+    '<div class="score-verdict">' + esc(a.verdict || '') + '</div>';
+
+  // Dimensions grid
+  const dims = a.dimensions || {};
+  document.getElementById('llm-dim-grid').innerHTML = LLM_DIMENSIONS.map(d => {
+    const dim = dims[d.key] || {};
+    const s = dim.score;
+    const c = s == null ? 'var(--muted)' : s <= 30 ? 'var(--red)' : s <= 60 ? 'var(--yellow)' : 'var(--green)';
+    return '<div class="dim-card">' +
+      '<div class="dim-head"><span class="dim-name">' + d.name + '</span><span class="dim-score" style="color:' + c + '">' + (s ?? '—') + '</span></div>' +
+      '<div class="dim-finding">' + esc(dim.finding || d.desc) + '</div>' +
+      (dim.impact ? '<div class="dim-impact">' + esc(dim.impact) + '</div>' : '') +
+      '<div class="dim-bar"><div class="dim-bar-fill" style="width:' + (s ?? 0) + '%;background:' + c + '"></div></div>' +
+    '</div>';
+  }).join('');
+
+  // Priority issues
+  const issues = a.priority_issues || [];
+  const pEl = document.getElementById('llm-priority-list');
+  if (!issues.length) {
+    pEl.innerHTML = '<div class="empty-state">No priority issues reported.</div>';
+  } else {
+    pEl.innerHTML = issues.map(i => {
+      const fixColor = i.fix_complexity === 'simple' ? 'badge-green' : i.fix_complexity === 'complex' ? 'badge-red' : 'badge-yellow';
+      return '<div class="issue-row">' +
+        '<div class="issue-rank" style="color:var(--gold)">#' + (i.rank || '?') + '</div>' +
+        '<div class="issue-body"><strong>' + esc(i.issue || '') + '</strong><span>' + esc(i.consequence || '') + '</span></div>' +
+        '<span class="badge ' + fixColor + '">' + (i.fix_complexity || 'unknown') + '</span>' +
+      '</div>';
+    }).join('');
+  }
+}
+
+// ---------- STEP 3: Generate fixes ----------
+async function llmGenerateFixes() {
+  if (!llmState.audit) { toast('Run an audit first', 'error'); return; }
+  toast('Asking Claude to generate fixes…', 'success');
+  document.getElementById('llm-fixes-list').innerHTML = '<div class="empty-state"><span class="spinner"></span> Generating schema, llms.txt, meta, and markdown mirrors…</div>';
+
+  try {
+    const resp = await fetch(LLM_API + '/audit/' + llmState.auditId + '/fixes', { headers: headers() });
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    llmState.fixes = await resp.json();
+    llmRenderFixes(llmState.fixes);
+  } catch (e) {
+    llmRenderFixesStub(e);
+  }
+}
+
+function llmRenderFixesStub(err) {
+  toast('Backend /api/llmready/*/fixes not available — showing scaffold', 'error');
+  llmState.fixes = {
+    schema: '<script type="application/ld+json">\n{\n  "@context": "https://schema.org",\n  "@type": "LocalBusiness",\n  "name": "Your Business",\n  "address": { "@type": "PostalAddress", "streetAddress": "123 Main St" },\n  "telephone": "(555) 555-1234"\n}\n<\/script>',
+    llms_txt: '# Your Business\n\n> One-line site description.\n\n## Pages\n- [Home](/): Landing page\n- [Services](/services): What we do\n- [Contact](/contact): Get in touch\n',
+    meta: '<title>Your Business &mdash; City, ST</title>\n<meta name="description" content="...">\n<meta property="og:title" content="...">\n<meta property="og:description" content="...">',
+    robots: 'User-agent: GPTBot\nAllow: /\n\nUser-agent: ClaudeBot\nAllow: /\n\nUser-agent: PerplexityBot\nAllow: /',
+  };
+  llmRenderFixes(llmState.fixes);
+}
+
+function llmRenderFixes(f) {
+  const fixes = [
+    { key: 'schema',   title: 'JSON-LD Schema Block',     unlocks: 'Enables AI search to cite your structured business data.',       code: f.schema },
+    { key: 'llms_txt', title: 'llms.txt Briefing File',   unlocks: 'Tells AI crawlers what the site is, what pages exist, who you serve.', code: f.llms_txt },
+    { key: 'meta',     title: 'Meta / Open Graph Tags',   unlocks: 'Complete title, description, OG, Twitter Card — required for link previews and LLM context.', code: f.meta },
+    { key: 'robots',   title: 'robots.txt AI Allowances', unlocks: 'Explicitly allows GPTBot, ClaudeBot, PerplexityBot.',              code: f.robots },
+  ].filter(x => x.code);
+
+  const el = document.getElementById('llm-fixes-list');
+  if (!fixes.length) {
+    el.innerHTML = '<div class="empty-state">No fixes generated.</div>';
+    return;
+  }
+  el.innerHTML = fixes.map(x =>
+    '<div class="fix-card">' +
+      '<div class="fix-head"><span class="fix-title">' + x.title + '</span>' +
+        '<button class="btn btn-ghost btn-sm" onclick="llmCopyFix(\'' + x.key + '\')">Copy</button>' +
+      '</div>' +
+      '<div class="fix-unlocks">&#x1f511; ' + x.unlocks + '</div>' +
+      '<pre class="fix-code" id="llm-fix-' + x.key + '">' + esc(x.code) + '</pre>' +
+    '</div>'
+  ).join('');
+}
+
+function llmCopyFix(key) {
+  const el = document.getElementById('llm-fix-' + key);
+  if (!el) return;
+  navigator.clipboard.writeText(el.textContent).then(() => toast('Copied!', 'success'));
+}
+
+// ---------- STEP 4: Upload codebase ----------
+function llmFileSelected() {
+  const f = document.getElementById('llm-zip').files[0];
+  if (!f) return;
+  llmState.zipFile = f;
+  document.getElementById('llm-file-name').textContent = f.name + ' (' + (f.size / 1024 / 1024).toFixed(1) + ' MB)';
+}
+
+async function llmAnalyzeUpload() {
+  if (!llmState.zipFile) { toast('Select a ZIP file first', 'error'); return; }
+  const fd = new FormData();
+  fd.append('file', llmState.zipFile);
+  fd.append('business_name', document.getElementById('llm-biz-name').value);
+  fd.append('business_phone', document.getElementById('llm-biz-phone').value);
+  fd.append('business_address', document.getElementById('llm-biz-address').value);
+  fd.append('business_services', document.getElementById('llm-biz-services').value);
+  fd.append('business_description', document.getElementById('llm-biz-desc').value);
+  if (llmState.auditId) fd.append('audit_id', llmState.auditId);
+
+  toast('Uploading and analyzing codebase…', 'success');
+  llmGoStep(5);
+  document.getElementById('llm-changes-list').innerHTML = '<div class="empty-state"><span class="spinner"></span> Detecting platform and mapping injection points…</div>';
+
+  try {
+    const resp = await fetch(LLM_API + '/optimize', {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + TOKEN },
+      body: fd,
+    });
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const data = await resp.json();
+    llmState.jobId = data.id || data.job_id;
+    llmState.job = data;
+    llmRenderChanges(data);
+  } catch (e) {
+    llmRenderChangesStub(e);
+  }
+}
+
+function llmRenderChangesStub(err) {
+  toast('Backend /api/llmready/optimize not available — showing scaffold', 'error');
+  llmState.job = {
+    platform: 'unknown',
+    findings: {
+      critical: [
+        { id: 'schema_missing',   title: 'Missing LocalBusiness schema',        desc: 'Injecting JSON-LD into <head> of theme layout.' },
+        { id: 'llms_txt_missing', title: 'No llms.txt file',                    desc: 'Creating /llms.txt and /.well-known/llm.txt.' },
+        { id: 'meta_missing',     title: 'No meta descriptions on 4 pages',     desc: 'AI-generated meta per page.' },
+      ],
+      important: [
+        { id: 'og_missing',       title: 'Missing Open Graph tags (6 pages)',   desc: 'Adding og:title, og:description, og:image.' },
+        { id: 'faq_schema',       title: 'No FAQ schema',                       desc: 'Extracting Q&A pairs, generating FAQPage JSON-LD.' },
+        { id: 'twitter_card',     title: 'Missing Twitter Card tags',           desc: 'Adding summary_large_image.' },
+        { id: 'robots_ai_block',  title: 'robots.txt blocks AI crawlers',       desc: 'Updating to explicitly allow GPTBot/ClaudeBot.' },
+        { id: 'alt_text',         title: '3 images missing alt text',           desc: 'Generating descriptive alt from page context.' },
+      ],
+      mirrors: [
+        { id: 'mirror_products',  title: 'Content mirror: /content-mirror/products.md', desc: 'Markdown copy of JS-rendered products page.' },
+        { id: 'mirror_services',  title: 'Content mirror: /content-mirror/services.md', desc: 'Markdown copy of JS-rendered services page.' },
+      ],
+    },
+  };
+  llmRenderChanges(llmState.job);
+}
+
+function llmRenderChanges(job) {
+  const badge = document.getElementById('llm-platform-badge');
+  if (badge) badge.textContent = 'Platform: ' + (job.platform || 'unknown');
+
+  const findings = job.findings || {};
+  const groups = [
+    { key: 'critical',  label: '&#x1f534; Critical',     items: findings.critical  || [] },
+    { key: 'important', label: '&#x1f7e1; Important',    items: findings.important || [] },
+    { key: 'mirrors',   label: '&#x1f535; Content Mirrors', items: findings.mirrors || [] },
+  ];
+
+  llmState.approved = {};
+  groups.forEach(g => g.items.forEach(i => { llmState.approved[i.id] = true; }));
+
+  document.getElementById('llm-changes-list').innerHTML = groups.filter(g => g.items.length).map(g =>
+    '<div class="change-group">' +
+      '<div class="change-group-title">' + g.label + ' (' + g.items.length + ')</div>' +
+      g.items.map(i =>
+        '<label class="change-item">' +
+          '<input type="checkbox" checked onchange="llmState.approved[\'' + i.id + '\']=this.checked">' +
+          '<div class="change-item-body">' +
+            '<div class="change-item-title">' + esc(i.title) + '</div>' +
+            '<div class="change-item-desc">' + esc(i.desc) + '</div>' +
+          '</div>' +
+        '</label>'
+      ).join('') +
+    '</div>'
+  ).join('') || '<div class="empty-state">No changes proposed.</div>';
+}
+
+// ---------- STEP 5 → 6: Apply changes ----------
+async function llmApplyChanges() {
+  const approved = Object.entries(llmState.approved).filter(([, v]) => v).map(([k]) => k);
+  if (!approved.length) { toast('Approve at least one change', 'error'); return; }
+
+  toast('Applying ' + approved.length + ' changes and building ZIP…', 'success');
+  llmGoStep(6);
+  document.getElementById('llm-result-summary').innerHTML = '<span class="spinner"></span> Injecting fixes, regenerating files, zipping…';
+
+  try {
+    const resp = await fetch(LLM_API + '/optimize/' + llmState.jobId + '/approve', {
+      method: 'POST',
+      headers: headers(),
+      body: JSON.stringify({ approved }),
+    });
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const data = await resp.json();
+    llmState.job = { ...llmState.job, ...data };
+    const before = data.score_before ?? '—';
+    const after = data.score_after_estimate ?? '—';
+    document.getElementById('llm-result-summary').innerHTML =
+      'Score: <strong style="color:var(--gold)">' + before + ' &rarr; ' + after + '</strong> (estimated after deployment)<br>' +
+      '<span style="color:var(--muted);font-size:12px">' + (data.approved_count ?? approved.length) + ' changes queued. ' +
+      'Note: ZIP rewrite is scaffolded &mdash; downloaded ZIP currently mirrors your upload. Check the change report for the full applied list once the Worker rewriter ships.</span>';
+  } catch (e) {
+    document.getElementById('llm-result-summary').innerHTML =
+      'Backend /api/llmready/optimize/…/approve not wired up yet.<br>' +
+      '<span style="color:var(--muted);font-size:12px">Applied ' + approved.length + ' changes in UI state. Wire up the Worker to produce the real ZIP.</span>';
+  }
+}
+
+function llmDownloadZip() {
+  if (!llmState.jobId) { toast('No job to download', 'error'); return; }
+  window.open(LLM_API + '/optimize/' + llmState.jobId + '/download?token=' + encodeURIComponent(TOKEN), '_blank');
+}
+
+function llmDownloadReport() {
+  if (!llmState.jobId) { toast('No job to download', 'error'); return; }
+  window.open(LLM_API + '/optimize/' + llmState.jobId + '/report?token=' + encodeURIComponent(TOKEN), '_blank');
+}
 
 // === INIT ===
 if (TOKEN) {
